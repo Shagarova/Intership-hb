@@ -1,0 +1,148 @@
+nav{
+	width: 350px;
+	border:1px solid lightgrey;
+	border-radius: 3px;
+	box-shadow: rgba(0,0,0,0.2);
+	margin:100px auto;
+	padding: 40px 40px 20px;
+	box-sizing: border-box;
+	background: #f7f7f7;
+}
+
+form{
+	width: 300px;
+}
+input{
+	padding-left:10px;
+	border:1px solid lightgrey;
+	border-radius: 3px;
+	display: block;
+	width: 270px;
+	height: 40px;
+	box-sizing: border-box;
+	margin-bottom:20px;
+	margin-top:10px;
+}
+
+.LoginForm.registration, .LoginForm.email{
+	display: none;
+}
+
+/*login*/
+#imgProfile{
+	border-radius: 50%;
+	width: 100px;
+	height: 100px;
+	margin:0px auto 40px auto;
+	border:1px solid lightgrey;
+
+}
+
+#buttonLogin,
+#buttonRegistration,
+#buttonReestablish{
+	margin-top:10px;
+	width: 270px;
+	background-color: #5cb85c;
+	border-radius: 5px;
+	color: #fff;
+	padding: 10px;
+	height: 36px;
+}
+
+#forgotPassword{
+	margin-top: 30px;
+	margin-bottom: 10px;
+}
+
+a{
+	text-decoration: none;
+	font-size: 16px;
+	color:#6891a2;
+}
+
+
+/*Registration*/
+
+#ReturnLoginFromRegistration, #ReturnLoginFromEmail{
+	margin-top:30px;
+}
+
+.requiredInput{
+	font-size: 16px;
+}
+
+.requiredInput+.required{
+	color:red;
+}
+/*ошибки*/
+
+.error{
+	z-index:10;
+	color:red;
+	margin-bottom:10px;
+}
+
+
+
+.modal{
+	width:350px;
+	height: 40px;
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	-ms-box-sizing: border-box;
+	-o-box-sizing: border-box;
+	box-sizing: border-box;
+	padding: 10px;
+	text-align: center;
+	position: fixed;
+	background:#fff;
+	border:1px solid black;
+	margin:auto auto;
+}
+
+
+.modal.Success{
+	z-index: 5;
+	height: 150px;
+	border:1px solid black;
+	padding: 50px;
+	color: darkgreen;
+	font-size: 25px;
+	top:40%;
+	left:50%;
+}
+
+
+
+
+.modal.ErrorValue{
+	color:red;
+	top:45%;
+	left:45%;
+}
+
+
+#capsIndicator{
+	display: none;
+	color: red;
+	margin-top:10px;
+}
+
+.ReestablishEmail{
+	color:green;
+	width:350px;
+	height: 50px;
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	-ms-box-sizing: border-box;
+	-o-box-sizing: border-box;
+	box-sizing: border-box;
+	padding: 10px;
+	text-align: center;
+	position: fixed;
+	background:#fff;
+	border:1px solid black;
+	margin:auto 40%;
+}
+
