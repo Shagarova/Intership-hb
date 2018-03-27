@@ -1045,6 +1045,14 @@ Search: function(token){
 
           if(profile.friend == true){
             console.log('dryg');
+            console.log($(['data-user-id="'+ profile.id +'"']));
+
+
+            var qqq = $(['data-user-id="'+ profile.id +'"']);
+            $(qqq).find($('button.found--item--follow')).remove();
+
+
+            // console.log(profile.id);
             // $('button.found--item--follow').remove();
             // var modalBlock = document.createElement('button');
             // var i = document.createElement('i');
@@ -1054,6 +1062,9 @@ Search: function(token){
             // $('.found--item--buttons').append(modalBlock);
           }
           else {
+
+            console.log('ne dryg');
+            console.log(profile.id);
             // $('button.found--item--unfollow').remove();
             // var modalBlock = document.createElement('button');
             // var i = document.createElement('i');
@@ -1062,7 +1073,6 @@ Search: function(token){
             // $(modalBlock).append(i, 'Block');
             // $('.found--item--buttons').append(modalBlock);
 
-            console.log('ne dryg');
           };
 
           /*проверяем есть ли фото, если нету или формат не соответствует, то подгружаем стандартное фото*/
@@ -1085,6 +1095,46 @@ Search: function(token){
  }
 });
 },
+
+
+/*Task 8 Album controller*/
+ AlbumController: function(token, id){
+  $.ajax({
+   url: 'http://restapi.fintegro.com/albums',
+   method: 'GET',
+   dataType: 'json',
+   headers: {
+     bearer: token
+   },
+   data:{
+    user_id:id
+   },
+
+   success: function (data) {
+    console.log(data);
+  }, 
+  error:function (xhr, status, error) {
+   console.log('ERROR!!!', xhr, status, error);
+ }
+});
+},
+
+//  AlbumControllerID: function(token){
+//   $.ajax({
+//    url: 'http://restapi.fintegro.com/albums/' + id + ' ',
+//    method: 'GET',
+//    dataType: 'json',
+//    headers: {
+//      bearer: token
+//    },
+//    success: function (data) {
+//     console.log(data);
+//   }, 
+//   error:function (xhr, status, error) {
+//    console.log('ERROR!!!', xhr, status, error);
+//  }
+// },
+
 };
 /*модальное окно про друзей и врагов*/
 
@@ -1431,6 +1481,12 @@ function logout() {
 
 
     
-
+$('body').on('click', '.nav-link__albums', function(e){
+      e.preventDefault();;
+      // var userID = $(this).closest('.found--item').attr('data-user-id');
+      App.AlbumController(token, id);
+     
+      return false;
+    });
 
     
