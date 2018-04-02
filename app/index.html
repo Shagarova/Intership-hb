@@ -1,76 +1,70 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
 	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width"/>
-	<title>Login</title>
-	<link rel="stylesheet" href="css/normalize.css"/>
-	<link rel="stylesheet" href="css/reset.css"/>
+	<title>Title</title>
+	<link rel="stylesheet" href="fonts/font-awesome-4.7.0/css/font-awesome.min.css">
+	<link rel="stylesheet" href="libs/bootstrap/css/bootstrap.min.css" >
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.3/css/tether.min.css">
+	<!-- <link rel="stylesheet" href="css/normalize.css"/> -->
+	<!-- <link rel="stylesheet" href="css/reset.css"/> -->
+	<link rel="stylesheet" href="css/common.min.css">
+	<link rel="stylesheet" href="css/CreateProfile.min.css">
 	<link rel="stylesheet" href="css/style.css"/>
-	<script src="js/jquery.min.js"></script>
 </head>
-
 <body>
-	<nav class='LoginForm login'>
-		<div id="imgProfile"> </div>
-		<form id='formLogin' class="form" method="post">
-			 <label class="requiredInput" for="loginLogin">Enter login</label><span class="required">*</span>
-			<input type="text" id="loginLogin" class="login" name="login" placeholder="Login">
-
-			 <label class="requiredInput" for="passwordLogin">Enter password</label><span class="required">*</span>
-			<input type="password"  id="passwordLogin" class="password" name="password" placeholder="Password"  onkeyup="checkCapsWarning(event)" onfocus="checkCapsWarning(event)" onblur="removeCapsWarning()">
-			<button type="button" id="buttonLogin">Sign In</button>
-		</div>
-	</form>
-	<div id="capsIndicator" > Внимание, нажат CapsLock</div>
-	<div id="forgotPassword"><a href="#">Forgot the pasword?</a></div>
-	<div id="newRegistration"><a href="#">А тут можно зарегистрироваться</a></div>
-</nav>
-
-
-<nav class='LoginForm registration'>
-
-	<div id="imgProfile"> </div>
-	<form id='formRegistration' class="form" method="post">
-		<input type="text" name="firstname" id="firstnameRegistration" placeholder="Введите имя">
-		<input type="text" name="lastname"  id="lastnameRegistration" placeholder="Введите фамилию">
-
-		 <label class="requiredInput" for="loginRegistration">Enter login</label><span class="required">*</span>
-		<input type="text" id="loginRegistration" class="login" name="login" placeholder="Введите логин"> 
-
-		 <label class="requiredInput" for="emailRegistration">Enter email</label><span class="required">*</span>
-		<input type="email" id="emailRegistration" class="email" name="email" placeholder="Введите email">
-
-		 <label class="requiredInput" for="passwordRegistration">Enter password</label><span class="required">*</span>
-		<input type="password"  id="passwordRegistration" class="password" name="password" placeholder="Введите пароль">
-
-		 <label class="requiredInput" for="repeatPasswordRegistration">RepeatPassword</label><span class="required">*</span>
-		<input type="password" id="repeatPasswordRegistration" name="repeatPassword" placeholder="Повторите пароль">
-		<button type="button"  id="buttonRegistration">Зарегистрироваться</button>
-
-		<div id="ReturnLoginFromRegistration"><a href="#">Return to login</a></div>
-
-	</form>
-</nav>
+	<header></header>
 
 
 
-<nav class='LoginForm email'>
-	<form id='formEmail' class="form" method="post">
-		 <label class="requiredInput" for="emailEmail">Enter email</label><span class="required">*</span>
-		<input type="email" id="emailEmail" class="email"  name="email" placeholder="Введите email">
+	<div class="main">
+		<section class="content">
+			<div class="container">
+				<div class="row">
+					<section class="left"> 
+						<div class="content__left col-xs-12 col-sm-12 col-md-3 col-lg-3">
+							<div class="user__info">
+							</div>
+							<div class="user__about">
+							</div>
 
-		<button type="button"  id="buttonReestablish">Восстановить</button>
-		<div id="ReturnLoginFromEmail"><a href="#">Return to login</a></div>
+							<div class="user__albums">
+							</div>
 
-	</form>
+						</div>
+					</section>
 
-</nav>
+					<section class="center"> 
+					</section>
+
+					<section class="right"> 
+						<div class="content__right  col-xs-12 col-sm-12 col-md-3 col-lg-3 ">
+							<div class="friends">
+							</div>
+
+							<div class="sponsored">
+							</div>
+
+						</div>
+					</section>
+				</div>
+			</div>
+		</section>
+	</div>
+
+	<div class="footer"></div>
 
 
 
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.0.11/handlebars.min.js"></script>
+	<script src="js/jquery.min.js"></script>
+	<script src="libs/bootstrap/js/bootstrap.min.js"></script>
 
-<script src="js/main.js"></script>
+	<script src="js/functions.js"></script>
+	<script src="js/click.js"></script>
+	<script src="js/routing.js"></script>
+	<script src="js/main.js"></script>
+	<script src="js/app.js"></script>
 
 </body>
 </html>

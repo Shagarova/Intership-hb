@@ -1,0 +1,132 @@
+<section class="createProfile">
+	<div class="container-fluid">
+		<div class="row">
+			<div class="createProfile__content col-xs-12 col-sm-12 col-md-12 col-lg-12">
+				<div class="createProfile__header">
+					<div class="user__information">
+						<div class="profile__photo">
+							<img class="userPhotoMini" src="#">
+						</div>
+						<div class="profile__name">
+							<span class="profile__firstname firstname">
+								Firstname
+							</span>
+							<span class="profile__lastname lastname">
+								Lastname
+							</span>
+						</div>
+					</div>
+				</div>
+				<div class="navigation">
+					<div class="nav tab-panel">
+
+						<a class="nav-link nav-link__profile active" data-tab='profile' href="#">Profile</a>
+						<a class="nav-link nav-link__albums" data-tab='albums' href="#">Albums</a>
+						<a class="nav-link nav-link__new-album" data-tab='new-album' href="#">Create Album</a>
+
+						<a class="nav-link nav-link__photos" data-tab='photos' href="#">Album photo</a>
+
+						<label class="nav-link nav-link__new-photo" data-tab='new-photo' for="NewPhoto">Upload Photo</label>
+						<form  method="post" class="createProfileForm">
+							<input type="file" name="UploadForm[imageFile]" id="NewPhoto" accept=".jpg, .jpeg, .png">
+						</form> 
+
+						<a class="nav-link nav-link__remove-album" data-tab='remove-album' href="#">Remove Album</a>
+
+					</div>
+
+					<div class="tab-content">
+						<div data-content='profile'>
+							<form  class="col-lg-6 col-12 offset-lg-3 form-update">
+								<div class="row">
+									<div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+										<label for="firstname">FirstName</label>
+										<input type="text" class="firstname" id="firstname" name="firstname" placeholder="Enter firstname">
+										<small id="firstnameHelp" class="form-text text-muted">Some help text</small>
+									</div>
+									<div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+										<label for="lastname">LastName</label>
+										<input type="text" class="lastname" id="lastname" name="lastname" placeholder="Enter lastname">
+									</div>
+									<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+										<label for="quote">Quote</label>
+										<input type="text" class="quote" id="quote" name="quote">
+									</div>
+									<div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+										<label for="lived">Lived</label>
+										<input type="text" class="lived" id="lived" name="lived">
+
+									</div>
+									<div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+										<label for="from">From</label>
+										<input type="text" class="from" id="from" name="from">
+									</div>
+									<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+										<label for="went">Went</label>
+										<input type="text" class="went" id="went" name="went">
+									</div>
+									<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+
+										<label for="profilePhoto">Profile photo</label>
+										<input type="file" name="UploadForm[imageFile]" id="profilePhoto">
+										<p><small id="profilePhotoHelp" class="form-text text-muted">File must be in "png, jpg, gif" format, and less than 10mb.</small></p>
+
+										<button type="button" class="button__submit"> Update</button>
+
+										<br>
+										<br>
+										<div class="name-file"> </div>
+										<a class="remove-profile"> Remove profile </a>
+									</div></div>
+
+								</form>
+
+
+
+							</div>
+
+
+
+
+
+							<div data-content='albums'>
+								<ul class="albums tab-pane" id="albums">
+									<li class="album-item-empty">
+										Нет альбомов. Создайте свой первый альбом!
+									</li>
+
+
+								</ul>
+							</div>
+
+							<div data-content='new-album'>
+
+							</div>
+
+							<div data-content='photos'>
+								<ul class="photos tab-pane" id="photos">
+									<li class="photo-item-empty">
+										<b>Here will be your photos</b> 
+									</li>
+
+
+								</ul>
+							</div>
+
+
+							<div data-content='new-photo'>
+
+							</div>
+
+
+							<div data-content='remuve-album'>
+								<b>remuve-album</b> ipsum dolor sit amet, consectetur adipisicing elit. Eius consequatur ipsum, animi dolor, officia maiores error veniam voluptatum facere recusandae aliquid perferendis beatae, quae optio ad veritatis doloribus maxime. Molestias maxime magni natus libero animi, harum aliquid. Dolore consequuntur incidunt quidem? Odio ut dicta doloremque laudantium magni explicabo officiis vitae adipisci cumque sit rerum totam dolorem,
+							</div>
+
+
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
