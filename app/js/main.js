@@ -1,5 +1,6 @@
 var globalPhoto;
 var NewPhoto;
+var postAddPhoto;
 var id = localStorage.getItem('user_id');
 var token = Func.cookies();
 
@@ -28,6 +29,7 @@ var App = {
 					bearer: token
 				},                               
 				success: function(data) {
+					console.log('tata');
 					console.log(data);
 					Render.profilePage(data);
 					Render.navUser();
@@ -51,24 +53,22 @@ var App = {
 				password: $('#password').val()
 			},
 			success: function (data) { 
+				App.init();
+				
+				window.location.href = "index.html";
 				console.log(data);
 				console.log('login');
 				var date = new Date(new Date().getTime() + 86400 * 1000);
 				document.cookie = 'session-token=' + data.token + '; expires=' + date.toUTCString();
 				localStorage.userID = data.profile.user_id;
-    // localStorage.setItem('token', data.token);
-    // sessionStorage.sessionToken = data.token;
-    // window.location.href = "header.html";
-    App.init();
-},
-beforeSend: function () {
-	console.log('Loading...');
-},
-error: function (xhr, status, error) {
-	$('body').append('вашего логина не существует');
-	console.log('вашего логина не существует', xhr, status, error);
-}
-});
+
+
+			},
+			error: function (xhr, status, error) {
+				$('body').append('вашего логина не существует');
+				console.log('вашего логина не существует', xhr, status, error);
+			}
+		});
 	},
 
 	registration: function() {
@@ -250,6 +250,7 @@ error: function (xhr, status, error) {
 		var form = new FormData();
 		form.append('UploadForm[imageFile]', ($('#profilePhoto')[0].files[0]));
 		form.append('UploadForm[imageFile]', ($('#NewPhoto')[0].files[0]));
+		// form.append('UploadForm[imageFile]', ($('#postAddPhoto')[0].files[0]));
 
 		$.ajax({
 			url: 'http://restapi.fintegro.com/upload',
@@ -265,9 +266,37 @@ error: function (xhr, status, error) {
 			success: function (data) {
 				globalPhoto = data.link;
 				NewPhoto = data.link;
+				postAddPhoto = data.link
 				console.log($('#profilePhoto')[0].files[0]);
 				console.log($('#NewPhoto')[0].files[0]);
+				// console.log($('#postAddPhoto')[0].files[0]);
 				console.log(NewPhoto);
+			},
+			error: function (xhr, status, error) {
+				console.log('ERROR!!!', [arguments]);
+			}
+		});
+	},
+
+	/*Добавление файлов на главной станице*/
+	UploadControllerMain:  function(token){
+		var form = new FormData();
+		form.append('UploadForm[imageFile]', ($('#postAddPhoto')[0].files[0]));
+
+		$.ajax({
+			url: 'http://restapi.fintegro.com/upload',
+			method: 'POST',
+			crossDomain:true,
+			cache:false,
+			contentType:false,
+			processData:false,
+			headers: {
+				bearer: token
+			},
+			data: form,
+			success: function (data) {
+				postAddPhoto = data.link
+				console.log($('#postAddPhoto')[0].files[0]);
 			},
 			error: function (xhr, status, error) {
 				console.log('ERROR!!!', [arguments]);
@@ -930,7 +959,8 @@ addPost: function addPost() {
 		method: 'POST',
 		dataType: 'json',
 		data: {
-			text: $('#massage').val()
+			text: $('#massage').val(),
+			media:url
 		},
 		headers: {
 			bearer: token
@@ -1036,25 +1066,39 @@ showPosts: function showPosts() {
 					for (var j = 0; j < data.posts[i].comments.length; j++) {
 						console.log('1');
 						comments += '<div class="row posts__comments" data-comment-id = "' + data.posts[i].comments[j].id + '">' +
-						'<div class="name"> ' +   
-						'<span class=""> ' + data.posts[i].user.lastname + ' </span>' +
-						'<span class=""> ' + data.posts[i].user.firstname + ' </span>' + 
-						' </div>' +
+						'<div class="container-fluid"> ' +   
+						'<div class="row"> ' +   
+						'<div class="col-lg-3 col-md-3 col-sm-3 col-xs-4"> ' +   
 						'<img src="' + data.posts[i].comments[j].user.photo + '" alt="" class="postUserPhoto">' +
+						'</div> ' +   
+						'<div class="col-lg-9 col-md-9 col-sm-9 col-xs-8"> ' + 
+						'<div class="userCommentname"> ' +   
+						'<span class="userCommentLastname"> ' + data.posts[i].user.lastname + ' </span>' +
+						'<span class="userCommentFirstname"> ' + data.posts[i].user.firstname + ' </span>' + 
+						' </div>' +
 						'<p>' + data.posts[i].comments[j].text +  
-						'<i class=" remove-comment">Х</i>' + '</p>' +
+						'<i class="remove-comment">x</i>' + '</p>' +
+						' </div>' +
+						' </div>' +
+						' </div>' +
 						'</div>';
 					}
 					$('.posts .wall__empty-item').append(
 						'<div class="post-item card-panel" data-id="' + data.posts[i].id + '">' +
-						'<div class="row">' +
 						'<div class="post-content">' +
-						'<div class="name"> ' +   
-						'<span class=""> ' + data.posts[i].user.lastname + ' </span>' +
-						'<span class=""> ' + data.posts[i].user.firstname + ' </span>' + 
-						' </div>' +
+						'<div class="container-fluid"> ' +   
+						'<div class="row"> ' +   
+						'<div class="col-lg-3 col-md-3 col-sm-3 col-xs-4"> ' + 
 						'<img src="' + data.posts[i].user.photo + '" alt="" class="postUserPhoto">' +
+						' </div>' +
+						'<div class="col-lg-9 col-md-9 col-sm-9 col-xs-8"> ' + 
+						'<div class="userPostname"> ' +   
+						'<span class="userPostLastname"> ' + data.posts[i].user.lastname + ' </span>' +
+						'<span class="userPostFirstname"> ' + data.posts[i].user.firstname + ' </span>' + 
+						' </div>' +
 						'<p>' + data.posts[i].text + '</p>' +
+						'</div>' +
+						'</div>' +
 						'</div>' +
 						'</div>' +
 						comments +

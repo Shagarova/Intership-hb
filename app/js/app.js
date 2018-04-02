@@ -4,6 +4,7 @@
 
     $('body').on('click', '#buttonLogin', function() {
       App.login();
+
     });
 
     $('body').on('click', '#buttonRegistration', function() {
@@ -32,16 +33,11 @@
       App.resetPassword();
     });
 
-
-
-
     $('body').on('click', '.header__menu--item.profile', function(e) {
       e.preventDefault();
       Render.createProfile();
       App.ProfilesControllerGet();
     });
-
-
 
 
     $('body').on('click', '.user__edit', function(e) {
@@ -476,7 +472,7 @@ return false;
     });
 
     $('body').on('click', '.remove-comment', function (e) {
-      var postId = $(this).parent().attr("data-comment-id");
+      var postId = $(this).closest('.posts__comments').attr("data-comment-id");
       e.preventDefault();
       App.removeComment(postId);
     });
@@ -486,5 +482,44 @@ return false;
       if ($('#massage').val().length != 0) App.addPost();
       $('#massage').val('');
     });
+
+
+    $('body').on('click', '.header__menu--link.logout', function (e) {
+
+      e.preventDefault();
+      App.logout();
+
+    });
+
+
+
+    /*При клике на Upload photo - сначала происходит загрузка фото на сервер*/ /*не работает*/
+    $('body').on('change', '#postAddPhoto', function(token){
+     App.UploadControllerMain(Func.cookies());
+
+     /*А через 3 сек происходит подгрузка фото в альбом*/
+
+     setTimeout(function() {
+      console.log('uwaevsdx');
+     //   var tab = $('.nav-link__albums').data('tab');
+     //   console.log(tab);
+     //   var albumID = $('[data-content =  ' + tab + ']').find('.active-album').attr('data-album-id');
+     //   console.log(albumID);
+     //   var url = NewPhoto;
+     //   console.log(url);
+     //   App.PhotoControllerPost(Func.cookies(), albumID, url);
+     //   App.PhotoController(Func.cookies(), albumID);
+   }, 3000);
+   });
+
+
+
+
+
+
+
+
+
+
 
   }());

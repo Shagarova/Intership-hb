@@ -8,6 +8,7 @@ var Render = {
       firstName: data.profile.firstname,
       lastName: data.profile.lastname
     };
+    // this.createRoute('views/pages/index.hbs', App.wrapper);
 
     this.createRoute('views/pages/profileLeftInfo.hbs', App.sectionLeftInfo, context);
     this.createRoute('views/pages/profileLeftAbout.hbs', App.sectionLeftAbout, context);
@@ -17,6 +18,7 @@ var Render = {
     this.createRoute('views/pages/profileRightSponsored.hbs', App.sectionRightSponsored, context);
 
     this.createRoute('views/pages/footer.hbs', App.footer, context);
+    
   },
 
   registerPage: function () {

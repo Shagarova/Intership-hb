@@ -339,23 +339,51 @@ html ul{
 									width: 88%;
 									margin-top:0px;
 								}
-								&>.camera{
+
+								& .camera{
+									height: 38px;
 									width: 8%;
 									border-right: 1px solid lightgrey;
+									label{
+										width: 40px;
+										height: 40px;
+										span{
+											width: 38px;
+											height: 38px;
+										}
+									}
+									& input[type="file"]{
+										visibility: hidden;
+										width: 10px;
+									}
 								}
-								&>.msg{
+								& .msg{
 									width: 8%;
 								}
 
 							}
 
 							.posts__comments{
+								width: 70%;
+								margin-left: 28%;
+								margin-top:20px;
+								margin-bottom: 20px;
 								.postUserPhoto{
 									border-radius: 50%;
 									width: 70px;
 								}
-								p{
+								.userCommentname{
+									margin-bottom: 20px;
+								}
+								.userCommentLastname, .userCommentFirstname{
 									font-size: 16px;
+								}
+								p{
+									font-size: 14px;
+								}
+								.remove-comment{
+									cursor: pointer;
+									margin-left:20px;
 								}
 							}
 							.post-item{
@@ -366,13 +394,20 @@ html ul{
 									border-bottom: 1px solid lightgrey;
 								}
 								.post-content{
+									.userPostname{
+										margin-top:10px;
+									}
+									.userPostLastname, .userPostFirstname{
+										font-size: 22px;
+									}
 									img{
 										border-radius: 50%;
 										width: 100px;
 										float: left;
 									}
 									p{
-										padding-top: 15px;
+										font-size: 16px;
+										padding-top: 30px;
 									}
 								}
 								.posts__input-comment{
