@@ -974,13 +974,13 @@ addPost: function addPost() {
 			text: $('#massage').val(),
 			media: [{
 				url:postAddPhoto
-			},
-			{
-				url:postAddPhoto
-			},
-			{
-				url:postAddPhoto
-			}]
+			}],
+			// {
+			// 	url:postAddPhoto
+			// },
+			// {
+			// 	url:postAddPhoto
+			// }]
 		},
 		headers: {
 			bearer: token
