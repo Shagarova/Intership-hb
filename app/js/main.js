@@ -974,13 +974,13 @@ addPost: function addPost() {
 			text: $('#massage').val(),
 			media: [{
 				url:postAddPhoto
-			}],
-			// {
-			// 	url:postAddPhoto
-			// },
-			// {
-			// 	url:postAddPhoto
-			// }]
+			},
+			{
+				url:postAddPhoto
+			},
+			{
+				url:postAddPhoto
+			}]
 		},
 		headers: {
 			bearer: token
@@ -1220,7 +1220,7 @@ showPosts: function showPosts() {
 							' </div>' +
 							'<p>' + data.posts[i].text + '</p>' +
 						// '<img src="" class="photomedia">' +
-						'<img src="' + data.posts[i].mediaList[0].url +'">' +
+						//'<img src="' + data.posts[i].mediaList[0].url +'">' +
 						'</div>' +
 						'</div>' +
 						'</div>' +
@@ -1247,5 +1247,137 @@ showPosts: function showPosts() {
 		}
 	});
 }, 
+
+//Добавление новостного комментария
+addNewsComment: function addNewsComment(text, id) {
+	$.ajax({
+		url: 'http://restapi.fintegro.com/comments',
+		method: 'POST',
+		dataType: 'json',
+		data: {
+			text: text,
+			post_id: id
+		},
+		headers: {
+			bearer: token
+		},
+		success: function () {
+			App.showNews();
+		},
+		error: function (xhr, status, error) {
+			console.log('ERROR!!!', xhr, status, error);
+		}
+
+	});
+},
+
+
+//Удаление новостного коментария
+removeNewsComment: function removeNewsComment(id) {
+	console.log(id);
+	$.ajax({
+		url: 'http://restapi.fintegro.com/comments/' + id,
+		method: 'DELETE',
+		dataType: 'json',
+		headers: {
+			bearer: token
+		},
+		success: function () {
+			App.showNews();
+		},
+		error: function (xhr, status, error) {
+			console.log('ERROR!!!', xhr, status, error);
+		}
+
+	});
+},
+
+//Запрос на вывод новостей
+showNews: function () {
+	$.ajax({
+		url: 'http://restapi.fintegro.com/news',
+		method: 'GET',
+		dataType: 'json',
+		data: {
+			limit: 10,
+			page: 1
+		},
+		headers: {
+			bearer: token
+		},
+		success: function (data) {
+			console.log(data);
+			if (data.news.length == 0) {
+				$('.posts .wall__empty-item').html('<div class="teal lighten-5 card"><p class="center card-content posts__message">You do not have news yet</p></div>');
+			} else {
+				$('.posts').html('<div class="wall__empty-item card-content news"></div>');
+				var comments = '';
+				for (var i = 0; i < data.news.length; i++) {
+					if (data.news[i].post != null) {
+						for (var j = 0; j < data.news[i].post.length; j++) {
+							comments = '';
+							for (var l = 0; l < data.news[i].post[j].comments.length; l++) {
+								comments += '<div class="row posts__comments" data-comment-id = "' + data.news[i].post[j].comments[l].id + '">' +
+									'<div class="container-fluid"> ' +
+									'<div class="row"> ' +
+									'<div class="col-lg-3 col-md-3 col-sm-3 col-xs-4"> ' +
+									'<img src="' + data.news[i].post[j].comments[l].user.photo + '" alt="" class="postUserPhoto">' +
+									'</div> ' +
+									'<div class="col-lg-9 col-md-9 col-sm-9 col-xs-8"> ' +
+									'<div class="userCommentname"> ' +
+									'<span class="userCommentLastname"> ' + data.news[i].post[j].comments[l].user.lastname + ' </span>' +
+									'<span class="userCommentFirstname"> ' + data.news[i].post[j].comments[l].user.firstname + ' </span>' +
+									' </div>' +
+									'<p>' + data.news[i].post[j].comments[l].text +
+									'<i class="remove-comment">x</i>' + '</p>' +
+									' </div>' +
+									' </div>' +
+									' </div>' +
+									'</div>';
+							}
+
+							$('.posts .wall__empty-item').append(
+								'<div class="post-item card-panel" data-id="' + data.news[i].post[j].id + '">' +
+								'<div class="post-content">' +
+								'<div class="container-fluid"> ' +
+								'<div class="row"> ' +
+								'<div class="col-lg-3 col-md-3 col-sm-3 col-xs-4"> ' +
+								'<img src="' + data.news[i].post[j].user.photo + '" alt="" class="postUserPhoto">' +
+								' </div>' +
+								'<div class="col-lg-9 col-md-9 col-sm-9 col-xs-8"> ' +
+								'<div class="userPostname"> ' +
+								'<span class="userPostLastname"> ' + data.news[i].post[j].user.lastname + ' </span>' +
+								'<span class="userPostFirstname"> ' + data.news[i].post[j].user.firstname + ' </span>' +
+								' </div>' +
+								'<p>' + data.news[i].post[j].text + '</p>' +
+								'</div>' +
+								'</div>' +
+								'</div>' +
+								'</div>' +
+								comments +
+								'<div class="row posts__input-comment">' +
+								'<input type="text" class="comments-field" placeholder="Enter your comment">' +
+								'<button class="btn add-news-comment center" type="submit" name="">' +
+								'<i class="fa fa-comment"> </i>' +
+								'</button>' +
+								'</div>' +
+								'<p class="right-align posts__buttons">' +
+								'<a href="comment-post">Сomment</a>' +
+								'<a href="remove-post">Remove</a>' +
+								'</p>' +
+								'</div>'
+							);
+						}
+					}
+
+				}
+			}
+		},
+		error: function (xhr, status, error) {
+			console.log('ERROR!!!', xhr, status, error);
+		}
+
+	});
+},
 
 };

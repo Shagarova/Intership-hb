@@ -497,6 +497,25 @@ return false;
       App.removeComment(postId);
     });
 
+    $('body').on('click', '.glyphicon', function(e) {
+      e.preventDefault();
+      console.log('dsjkcdcs kj');
+      App.showNews();
+    });
+
+    $('body').on('click', '.news .add-news-comment', function(e) {
+      var postId = $(this).parent().parent().attr("data-id"),
+      text = $(this).parent().parent().find('.comments-field').val().length;
+      e.preventDefault();
+      if (text != 0) App.addNewsComment($(this).parent().parent().find('.comments-field').val(), postId);
+    });
+
+    $('body').on('click', '.remove-comment', function (e) {
+      var postId = $(this).closest('.posts__comments').attr("data-comment-id");
+      e.preventDefault();
+      App.removeNewsComment(postId);
+    });
+
     $('body').on('click', '.add-massege', function () {
       console.log('iwfesd');
       if ($('#massage').val().length != 0) {
