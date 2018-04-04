@@ -104,6 +104,81 @@ var Func = {
 		});
 
 	},
+	validateName: function validateName(){
+		if ($('#login').val() ===''){
+			$(document.getElementById('login')).after('<p>Вы не ввели значение<p>');
+			$('#form>p').addClass('error');
+			return false;
+		}
+		else if($('#login').val().length<6){
+			$(document.getElementById('login')).after('<p>Количество символов меньше допустимого<p>');
+			$('#form>p').addClass('error');
+			return false;
+		}
+		return true;
+	},
+
+
+	validateEmail: function validateEmail(){
+		var pattern = /^[a-z0-9_-]+@[a-z0-9-]+\.([a-z]{1,6}\.)?[a-z]{2,6}$/i;
+		if($('#email').val() === ''){
+			$(document.getElementById('email')).after('<p>Вы не ввели значение<p>');
+			$('#form>p').addClass('error');
+			return false;
+		}
+		else if($('#email').val().search(pattern) !== 0){
+			$(document.getElementById('email')).after('<p>Ваш email не корректен!<p>');
+			$('#form>p').addClass('error');
+			return false;
+		}
+		return true;
+	},
+
+
+
+	validatePassword: function validatePassword(){
+		if ($('#password').val() ===''){
+			$(document.getElementById('password')).after('<p>Вы не ввели значение<p>');
+			$('#form>p').addClass('error');
+			return false;
+		}
+		else if($('#password').val().length<6){
+			$(document.getElementById('password')).after('<p>Количество символов меньше допустимого<p>');
+			$('#form>p').addClass('error');
+			return false;
+		}
+		return true;
+	},
+
+
+	validateRepeatPassword: function validateRepeatPassword(){
+		if ($('#repeatPassword').val() ===''){
+			$(document.getElementById('repeatPassword')).after('<p>Вы не ввели значение<p>');
+			$('#form>p').addClass('error');
+			return false;
+		}
+		else if($('#repeatPassword').val()!==($('#password').val())){
+			$(document.getElementById('repeatPassword')).after('<p>Ваши пароли не совпадают<p>');
+			$('#form>p').addClass('error');
+			return false;
+		}
+		else{
+			return true;
+		}
+	},
+
+
+
+	/*показывает ошибку, если было введено неверное значение в капчу*/
+	showErrorValue: function showErrorValue(){
+		$('body').append('<div class="modal ErrorValue">Wrong </div>');
+	},
+
+	/*регистрация прошла успешно*/
+	showSuccess: function showSuccess(){
+		$('body').append('<div class="modal Success">Регистрация прошла успешно </div>');
+		$('.modal.Success').fadeIn(1000).delay(3000).fadeOut(1000, function(){$(this).remove()});
+	},
 
 };
 

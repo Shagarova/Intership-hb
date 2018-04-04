@@ -124,7 +124,7 @@
 		min-height: 600px;
 
 		form{
-			max-width: 50%;
+			width: 50% !important;
 			margin-left:25%;
 			label{
 				font-weight: normal;
@@ -166,62 +166,62 @@
 
 		}
 
-		.album-item{
-			list-style-type: none;
-			margin-left:10px;
-			position: relative;
-			display: inline-block;
-			
-			overflow: hidden;
-			width: calc(25% - 5px);
-			height: 200px;
-			border:1px solid black;
-			border-radius: 5px;
-			background: url('../img/no-image.png')  center;
-			cursor: pointer;
+		// .album-item{
+		// 	list-style-type: none;
+		// 	margin-left:10px;
+		// 	position: relative;
+		// 	display: inline-block;
 
-			&:before {
-				content: "";
-				height: 100%;
-				background: rgba(0,0,0,0.5);
-			}
-			&:after {
-				content: "Open";
-				bottom: 0;
-				right: 0;
-				height: 64px;
-				display: none;
-				margin: auto 35%;
-				color: #fff;
-				font-size: 32px;
+		// 	overflow: hidden;
+		// 	width: calc(25% - 5px);
+		// 	height: 200px;
+		// 	border:1px solid black;
+		// 	border-radius: 5px;
+		// 	background: url('../img/no-image.png')  center;
+		// 	cursor: pointer;
 
-			}
-			&:after, &:before {
-				position: absolute;
-				top: 0;
-				left: 0;
-				width: 100%;
-				display: none;
+		// 	&:before {
+		// 		content: "";
+		// 		height: 100%;
+		// 		background: rgba(0,0,0,0.5);
+		// 	}
+		// 	&:after {
+		// 		content: "Open";
+		// 		bottom: 0;
+		// 		right: 0;
+		// 		height: 64px;
+		// 		display: none;
+		// 		margin: auto 35%;
+		// 		color: #fff;
+		// 		font-size: 32px;
+
+		// 	}
+		// 	&:after, &:before {
+		// 		position: absolute;
+		// 		top: 0;
+		// 		left: 0;
+		// 		width: 100%;
+		// 		display: none;
 
 
-			}
-			&:hover:after, &:hover:before {
-				display: block;
-			}
-		}
+		// 	}
+		// 	&:hover:after, &:hover:before {
+		// 		display: block;
+		// 	}
+		// }
 
-		.photo-item{
-			display: inline-block;
-			list-style-type: none;
-			width: 200px;
-			height: 200px;
-			border:1px solid black;
-			margin-bottom: 10px;
-			margin-right: 10px;
-			text-align:center;
-			
+		// .photo-item{
+		// 	display: inline-block;
+		// 	list-style-type: none;
+		// 	width: 200px;
+		// 	height: 200px;
+		// 	border:1px solid black;
+		// 	margin-bottom: 10px;
+		// 	margin-right: 10px;
+		// 	text-align:center;
+
   // vertical-align: baseline;
-}
+// }
 
 
 
@@ -305,7 +305,7 @@
 }
 
 .modal-newElem{
-	padding:2% 10% 2% 10%;
+	padding:2% 10% 2% 5%;
 	display: block;
 }
 
@@ -313,7 +313,7 @@
 	margin-left:20px;
 	padding: 5px 10px;
 	border-radius: 3px;
-	width: 50%;
+	width: 30%;
 	display: inline-block;
 }
 
@@ -340,6 +340,7 @@
 	margin-bottom: 30px;
 	margin-right: 20px;
 	border-radius: 5px;
+
 	.albums__name{
 		text-decoration: none;
 		font-size:16px;
@@ -359,6 +360,19 @@
 	}
 }
 
+.user__albums__description>.user__albums__items>.albums__list__item{
+	width: 47%;
+	height: 100px;
+	margin-right:5px;
+}
+.user__albums__description .albums__list__item--info{
+
+	margin-top: 100px;
+	margin-left: 10%;
+	&>a{
+		font-size: 12px;
+	}
+}
 
 
 /*Фотографии*/
@@ -439,6 +453,15 @@
 
 
 @media (min-width: 1200px){
+	/*модальное окно*/
+	.modal{
+		position: fixed !important;
+		width: 60% !important;
+		height: 25% !important;
+		top:10% !important;
+		left:10% !important;
+
+	}
 	.createProfile{
 		.navigation {
 			width: 1230px;
@@ -449,15 +472,45 @@
 }
 
 
-@media (max-width: 992px){
+@media (max-width: 991px){
 	.createProfile{
 
 		.tab-content{
 			padding:20px 20px;
 			form{
-				max-width: 100%;
+				width: 100% !important;
 				margin-left:0%;
 			}
+		}
+	}
+	.user__albums__description>.user__albums__items>.albums__list__item{
+		width: 22%;
+		height: 150px;
+		margin-right:10px;
+	}
+	.user__albums__description .albums__list__item--info{
+
+		margin-top: 150px;
+		margin-left: 10%;
+		&>a{
+			font-size: 12px;
+		}
+	}
+}
+
+@media (max-width: 800px){
+
+	.user__albums__description>.user__albums__items>.albums__list__item{
+		width: 30%;
+		height: 150px;
+		margin-right:5px;
+	}
+	.user__albums__description .albums__list__item--info{
+
+		margin-top: 150px;
+		margin-left: 10%;
+		&>a{
+			font-size: 12px;
 		}
 	}
 }
@@ -472,6 +525,21 @@
 	.col-xs-6{
 		width: 100% !important;
 	}
+
+	.user__albums__description>.user__albums__items>.albums__list__item{
+		width: 48%;
+		height: 150px;
+		margin-right:5px;
+	}
+	.user__albums__description .albums__list__item--info{
+
+		margin-top: 150px;
+		margin-left: 10%;
+		&>a{
+			font-size: 12px;
+		}
+	}
+
 }
 
 

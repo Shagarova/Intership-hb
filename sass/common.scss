@@ -352,6 +352,9 @@ html ul{
 											height: 38px;
 										}
 									}
+									form{
+										width: 10px;
+									}
 									& input[type="file"]{
 										visibility: hidden;
 										width: 10px;
@@ -363,11 +366,14 @@ html ul{
 
 							}
 
+
 							.posts__comments{
 								width: 70%;
 								margin-left: 28%;
 								margin-top:20px;
 								margin-bottom: 20px;
+								border: 1px solid lightgrey;
+								border-radius:5px;
 								.postUserPhoto{
 									border-radius: 50%;
 									width: 70px;
@@ -386,6 +392,8 @@ html ul{
 									margin-left:20px;
 								}
 							}
+
+
 							.post-item{
 								margin-bottom:10px;
 
@@ -393,7 +401,13 @@ html ul{
 								&:not(:last-child){
 									border-bottom: 1px solid lightgrey;
 								}
+								.remove-post{
+									cursor: pointer;
+									margin-left:20px;
+								}
 								.post-content{
+									border:1px solid lightgrey;
+									border-radius: 10px;
 									.userPostname{
 										margin-top:10px;
 									}
@@ -689,7 +703,7 @@ small.search--small{
 						&--info{
 							.friends__name{
 								font-weight: bold;
-								font-size:15px;
+								font-size:13px;
 								text-decoration: none;
 								
 							}
@@ -864,7 +878,7 @@ small.search--small{
 				position: fixed;
 				bottom: 0;
 				left: 0;
-				width: 100%;
+				width: 100vw;
 				height:50px;
 				padding-top:15px;
 				&__item{
@@ -876,6 +890,39 @@ small.search--small{
   }
 
 }
+
+
+.mediaContent{
+	margin-top:10px;
+	margin-bottom:20px;
+	.mediaContentList{
+		display: flex;
+		flex-wrap: wrap;
+	}
+	&__item{
+		width: 100px;
+		height: 100px;
+		margin-top: 10px;
+		&:not(:first-child){
+			margin-left:10px;
+		}
+		&:hover{
+			opacity: 0.5;
+		}
+		&>img{
+			width: 100px;
+			height: 100px;
+		}
+	}
+}
+
+
+
+
+
+
+
+
 
 // @media screen and (max-width: 1200px) {
 // 	.container{
@@ -928,9 +975,18 @@ small.search--small{
 
 @media screen and (max-width: 992px) {
 	.container{
-		width: 100% !important;
+		// width: 100% !important;
 		margin:0px !important;
 	}
+	.main>.content>.container{
+		padding: 0px;
+		width: 100vw;
+		.row{
+			padding: 0px;
+			margin:0px;
+		}
+	}
+
 	.content{
 		&__left{
 			.user{

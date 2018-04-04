@@ -29,6 +29,11 @@ var Render = {
     this.createRoute('views/pages/returnPas.hbs', App.wrapper);
   },
 
+
+  // createAlbum: function(){
+  //   this.createRoute('views/modules/CreateAlbum.hbs', App.section);    
+  // },
+
   // albumsPage: function () {
   //   this.createRoute('views/pages/albums.hbs', App.wrapper);
   // },
@@ -67,26 +72,6 @@ var Render = {
     this.createRoute('views/pages/createProfile.hbs', App.section);
   },
 
-
-  // navGuest: function () {
-  //   this.createRoute('views/modules/header-nav-unauthorized.hbs', App.header);
-  // },
-
-  // addAlbumForm: function () {
-  //   this.createRoute('views/modules/add-album-form.hbs', $('.add-album-container'));
-
-  //   setTimeout(function () {
-  //     $('.add-album-form').slideDown();
-  //   }, 500);
-  // },
-
-  // addPhotoForm: function () {
-  //   this.createRoute('views/modules/add-photo-form.hbs', $('.add-photo-container'));
-
-  //   setTimeout(function () {
-  //     $('.add-photo-form').slideDown();
-  //   }, 500);
-  // },
 
   createRoute: function (url, container, context) {
     var template;

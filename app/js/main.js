@@ -3,7 +3,7 @@ var NewPhoto;
 var postAddPhoto;
 var id = localStorage.getItem('user_id');
 var token = Func.cookies();
-
+var arr;
 var App = {
 
 	header: $('header'),
@@ -18,6 +18,10 @@ var App = {
 	footer: $('.footer'),
 	CreateProfile: $('.createProfile'),
 	friendsList: $('.friends__list'),
+	body:$('body'),
+	overlay:$('overlay'),
+
+	// mediaContentList: $('#mediaContentList'),
 
 	init: function() {
 		if(token) {
@@ -163,6 +167,7 @@ var App = {
      $('.friends__list').children().remove();
      $('.search__allFriends').children().remove();
      App.showPosts();
+     App.AlbumController(token);
      /*если количество друзей не 0, то убираем пустой элемент с текстом, что ничего не найдено*/
      if(data.friends_count!==0){
      	$('.friends__list__item.empty').css({
@@ -266,10 +271,8 @@ error: function (xhr, status, error) {
 			success: function (data) {
 				globalPhoto = data.link;
 				NewPhoto = data.link;
-				postAddPhoto = data.link
 				console.log($('#profilePhoto')[0].files[0]);
 				console.log($('#NewPhoto')[0].files[0]);
-				// console.log($('#postAddPhoto')[0].files[0]);
 				console.log(NewPhoto);
 			},
 			error: function (xhr, status, error) {
@@ -295,6 +298,7 @@ error: function (xhr, status, error) {
 			},
 			data: form,
 			success: function (data) {
+				console.log(data);
 				postAddPhoto = data.link
 				console.log($('#postAddPhoto')[0].files[0]);
 			},
@@ -621,7 +625,7 @@ error: function(data){
 
     /*удаляем из поиска другие результаты поиска*/
     $('.search__result--found').children().remove();
-
+    $('.posts').hide();
     /*если количество результатов поиска не 0, то убираем пустой элемент с текстом, что ничего не найдено*/
     if(data.profiles.length!==0){
     	$('.search__result--empty').css({
@@ -698,11 +702,11 @@ error: function (xhr, status, error) {
 				user_id:id
 			},
 			success: function (data) {
-
 				console.log(data);
-
+				console.log(data.albums.length);
     // localStorage.setItem('albums_id', data.albums.id);
     $('#albums').children().remove();
+
     /*если количество альбомов не 0, то убираем пустой элемент с текстом, что ничего не найдено*/
     if(data.albums.length!==0){
     	$('.album-item-empty').css({
@@ -715,12 +719,14 @@ error: function (xhr, status, error) {
     		albums_id=data.albums[i].id;
     		/*функция по выводу информации про альбомы*/
     		function AllAlbums(id, name, created, photos){
-    			$('#albums').append('<li class="albums__list__item" data-album-id="' + id + '">\
+    			$('#albums').append('<li class="albums__list__item" data-album-created="' + created + '" data-album-id="' + id + '">\
     				<a href="#" class="albums__list__item--delete">x</a>\
     				<div class="albums__list__item--info">\
-    				<a href="#" class="albums__name">  ' + name + ' <span class="albums__created">' + created + ' </span></a>\
+    				<a href="#" class="albums__name">  ' + name + ' </a>\
     				</li>');
     		}
+
+
     		AllAlbums(albums.id,albums.name,albums.created,albums.photos);
 
 
@@ -730,7 +736,8 @@ error: function (xhr, status, error) {
         	console.log(albums.photos[0].url);
         	$('.albums__list__item').eq(i).css({
         		'backgroundImage': 'url(' + albums.photos[0].url+ ')',
-        		'backgroundSize': 'cover'
+        		'backgroundSize': 'cover',
+        		'background-repeat':'no-repeat'
         	});
 
         }
@@ -739,7 +746,8 @@ error: function (xhr, status, error) {
         	console.log(albums.photos.length);
         	$('.albums__list__item').eq(i).css({
         		'backgroundImage': 'url(../img/no-image.png)', 
-        		'backgroundSize': 'cover'
+        		'backgroundSize': 'cover',
+        		'background-repeat':'no-repeat'
         	});
         }
     };
@@ -905,7 +913,7 @@ error:function (xhr, status, error) {
 
 
 
-// PhotoControllerPost: function(token, albumID, url){
+
 	PhotoControllerPost: function(token, albumID, url){
 		$.ajax({
 			url: 'http://restapi.fintegro.com/photos',
@@ -954,20 +962,34 @@ error:function (xhr, status, error) {
 
 //Добавление поста
 addPost: function addPost() {
+	// arr = [postAddPhoto];
+	
+
+	console.log(postAddPhoto);
 	$.ajax({
 		url: 'http://restapi.fintegro.com/posts',
 		method: 'POST',
 		dataType: 'json',
 		data: {
 			text: $('#massage').val(),
-			media:url
+			media: [{
+				url:postAddPhoto
+			},
+			{
+				url:postAddPhoto
+			},
+			{
+				url:postAddPhoto
+			}]
 		},
 		headers: {
 			bearer: token
 		},
-		success: function () {
-			console.log($('#massage').val());
+		success: function (data) {
+
 			App.showPosts();
+			console.log(data);
+			// console.log(data.mediaList.url);
 		},
 		error: function (xhr, status, error) {
 			console.log('ERROR!!!', xhr, status, error);
@@ -975,6 +997,32 @@ addPost: function addPost() {
 
 	});
 },
+// addMedia: function addPost() {
+// 	$.ajax({
+// 		url: 'http://restapi.fintegro.com/posts',
+// 		method: 'POST',
+// 		dataType: 'json',
+// 		data: {
+// 			media:{
+// 				// id:mediaId,
+// 				url:postAddPhoto,
+// 				// created:mediaCreated
+// 			}
+// 		},
+// 		headers: {
+// 			bearer: token
+// 		},
+// 		success: function (data) {
+// 			console.log('addmedia');
+// 			console.log(postAddPhoto);
+// 			},
+// 		error: function (xhr, status, error) {
+// 			console.log('ERROR!!!', xhr, status, error);
+// 		}
+
+// 	});
+// },
+
 
 //Удаление поста
 removePost: function removePost(id) {
@@ -1040,14 +1088,52 @@ removeComment: function removeComment(id) {
 	});
 },
 
+// ShowMedia: function ShowMedia(){
+// 	$.ajax({
+// 		url: 'http://restapi.fintegro.com/posts',
+// 		method: 'GET',
+// 		dataType: 'json',
+// 		data: {
+// 			limit: 100,
+// 			page: 1
+// 		},
+// 		headers: {
+// 			bearer: token
+// 		},
+
+// 		success: function (data) {
+// 			console.log(data);
+
+// 			for(var i=0;i<data.posts[i].mediaList.length;i++){
+// 				var media = data.posts[i].mediaList;
+// 				console.log(media);
+// 				console.log('wiugfe');
+// 				/*функция по выводу информации про фото*/
+// 				function mediaPost(id, url, created){
+// 					$('#mediaContent').append('<li class="photo__item" data-photo-created="'+ created+'" data-photo-id="' + id + '">\
+// 						<div class="modal-title PhotoDelete"><a href="#" class="modal-close PhotoDelete">x</a></div>\
+// 						<img src=" ' + url + ' ">');
+// 				}
+// 				mediaPost(media.id,media.url,media.created);
+
+// 			};
+// 		}, 
+// 		error: function (xhr, status, error) {
+// 			console.log('ERROR!!!', xhr, status, error);
+// 		}
+
+// 	});
+
+// },
 //Запрос на вывод постов
 showPosts: function showPosts() {
+
 	$.ajax({
 		url: 'http://restapi.fintegro.com/posts',
 		method: 'GET',
 		dataType: 'json',
 		data: {
-			limit: 50,
+			limit: 100,
 			page: 1
 		},
 		headers: {
@@ -1056,15 +1142,47 @@ showPosts: function showPosts() {
 
 		success: function (data) {
 			console.log(data);
+			console.log(data.posts);
+
+
+
+
+
+			// /*добавила*/
+			// for(var i=0;i<data.posts[i].mediaList.length;i++){
+			// 	var media = data.posts[i].mediaList;
+
+			// 	/*функция по выводу информации про фото*/
+			// 	function mediaPost(id, url, created){
+			// 		$('#mediaContent').append('<li class="photo__item" data-photo-created="'+ created+'" data-photo-id="' + id + '">\
+			// 			<div class="modal-title PhotoDelete"><a href="#" class="modal-close PhotoDelete">x</a></div>\
+			// 			<img src=" ' + url + ' ">');
+			// 	}
+			// 	mediaPost(media.id,media.url,media.created);
+
+			// };
+			// /**/
+
+
+
+
+
 			if (data.posts.length == 0) {
 				$('.posts .wall__empty-item').html('<div class="teal lighten-5 card"><p class="center card-content posts__message">This will be your wall</p></div>');
 			} else {
 				$('.posts .wall__empty-item').html($('#massage').val());
 				var comments = '';
 				for (var i = 0; i < data.posts.length; i++) {
+					console.log(data.posts[i].mediaList.length);
+						// data.posts[i].mediaList.url = postAddPhoto;
+						// for (var t = 0; t<data.posts[i].mediaList.length; t++){
+						// 	console.log(data.posts[i].mediaList[t]);
+						// }
+						
+					// $('.photomedia').eq(i).attr('src', ''+ postAddPhoto + '');
 					comments = '';
 					for (var j = 0; j < data.posts[i].comments.length; j++) {
-						console.log('1');
+						
 						comments += '<div class="row posts__comments" data-comment-id = "' + data.posts[i].comments[j].id + '">' +
 						'<div class="container-fluid"> ' +   
 						'<div class="row"> ' +   
@@ -1075,28 +1193,34 @@ showPosts: function showPosts() {
 						'<div class="userCommentname"> ' +   
 						'<span class="userCommentLastname"> ' + data.posts[i].user.lastname + ' </span>' +
 						'<span class="userCommentFirstname"> ' + data.posts[i].user.firstname + ' </span>' + 
+						'<i class="remove-comment">x</i>' + 
 						' </div>' +
 						'<p>' + data.posts[i].comments[j].text +  
-						'<i class="remove-comment">x</i>' + '</p>' +
+						'</p>' +
 						' </div>' +
 						' </div>' +
 						' </div>' +
 						'</div>';
 					}
-					$('.posts .wall__empty-item').append(
-						'<div class="post-item card-panel" data-id="' + data.posts[i].id + '">' +
-						'<div class="post-content">' +
-						'<div class="container-fluid"> ' +   
-						'<div class="row"> ' +   
-						'<div class="col-lg-3 col-md-3 col-sm-3 col-xs-4"> ' + 
-						'<img src="' + data.posts[i].user.photo + '" alt="" class="postUserPhoto">' +
-						' </div>' +
-						'<div class="col-lg-9 col-md-9 col-sm-9 col-xs-8"> ' + 
-						'<div class="userPostname"> ' +   
-						'<span class="userPostLastname"> ' + data.posts[i].user.lastname + ' </span>' +
-						'<span class="userPostFirstname"> ' + data.posts[i].user.firstname + ' </span>' + 
-						' </div>' +
-						'<p>' + data.posts[i].text + '</p>' +
+
+					// for (var t = 0; t<data.posts[i].mediaList.length; t++){
+						$('.posts .wall__empty-item').append(
+							'<div class="post-item card-panel" data-id="' + data.posts[i].id + '">' +
+							'<div class="post-content">' +
+							'<div class="container-fluid"> ' +   
+							'<div class="row"> ' +   
+							'<div class="col-lg-3 col-md-3 col-sm-3 col-xs-4"> ' + 
+							'<img src="' + data.posts[i].user.photo + '" alt="" class="postUserPhoto">' +
+							' </div>' +
+							'<div class="col-lg-9 col-md-9 col-sm-9 col-xs-8"> ' + 
+							'<div class="userPostname"> ' +   
+							'<span class="userPostLastname"> ' + data.posts[i].user.lastname + ' </span>' +
+							'<span class="userPostFirstname"> ' + data.posts[i].user.firstname + ' </span>' + 
+							'<i class="remove-post">x</i>' + 
+							' </div>' +
+							'<p>' + data.posts[i].text + '</p>' +
+						// '<img src="" class="photomedia">' +
+						'<img src="' + data.posts[i].mediaList[0].url +'">' +
 						'</div>' +
 						'</div>' +
 						'</div>' +
@@ -1114,6 +1238,7 @@ showPosts: function showPosts() {
 						'</p>' +
 						'</div>'
 						);
+					// }
 				}
 			}
 		},

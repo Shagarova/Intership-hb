@@ -8,7 +8,11 @@
     });
 
     $('body').on('click', '#buttonRegistration', function() {
-      App.registration();
+      $("#form>p.error").remove();
+      if(Func.validateName()&&Func.validateEmail()&&Func.validatePassword()&&Func.validateRepeatPassword()){
+        App.registration();
+      }
+      
     });
 
     $('body').on('click', '#newRegistration a', function(e) {
@@ -46,6 +50,15 @@
       App.ProfilesControllerGet();
     });
 
+
+    $('body').on('click', '.user__edit.user__albums', function(e) {
+      e.preventDefault();
+      Render.createProfile();
+      App.ProfilesControllerGet();
+      var tabalbums = $('.nav-link__albums').data('tab');
+      $('[data-content =  ' + tabalbums + ']').fadeIn();
+    });
+
     /*добавление аватарки*/
     $('body').on('change','#profilePhoto', function(token){
       App.UploadController(Func.cookies());
@@ -55,7 +68,7 @@
     /*обновление информации профиля*/ /*работает*/
 
     $('body').on('click','.button__submit', function(){
-      App.ProfileControllerPut(token);
+      App.ProfileControllerPut(Func.cookies());
     });
 
 
@@ -181,6 +194,7 @@
     
 
 
+
     /*Клик на Albums*/
     $('body').on('click', '.nav-link__albums', function(e){
       e.preventDefault();;
@@ -199,8 +213,6 @@
           </div>\
           </div>');
       });
-
-
 
 
     /*при нажатии на конкретный альбом*/
@@ -260,9 +272,9 @@ App.PhotoController(token, albumID);
 return false;
 });
 
-
     /*нажимаем на вкладку - создание нового альбома*/
     $('body').on('click', '.nav-link__new-album', function(){
+      console.log('qq');
       var tabalbums = $('.nav-link__albums').data('tab');
       $('[data-content =  ' + tabalbums + ']').fadeIn();
     });
@@ -318,6 +330,7 @@ return false;
 
 
 
+
     /*При клике на Upload photo - сначала происходит загрузка фото на сервер*/ /*не работает*/
     $('body').on('change', '#NewPhoto', function(token){
      App.UploadController(Func.cookies());
@@ -362,7 +375,7 @@ return false;
       App.PhotoControllerDelete(Func.cookies(), photoID);
 
       setTimeout(function(){
-        App.PhotoController(Func.cookies(), 254);
+        App.PhotoController(Func.cookies(), albumID);
       },2000);
 
 
@@ -457,6 +470,13 @@ return false;
       $(this).parent().parent().remove();
     });
 
+    $('body').on('click', '.remove-post', function (e) {
+      var postId = $(this).closest('.post-item').attr("data-id");
+      e.preventDefault();
+      App.removePost(postId);
+      $(this).closest('.post-item').remove();
+    });
+
 
     $('body').on('click', '.post-item a[href=comment-post]', function (e) {
       var postId = $(this).parent().parent().attr("data-id");
@@ -479,8 +499,12 @@ return false;
 
     $('body').on('click', '.add-massege', function () {
       console.log('iwfesd');
-      if ($('#massage').val().length != 0) App.addPost();
+      if ($('#massage').val().length != 0) {
+        App.addPost();
+        // App.addMedia();
+      }
       $('#massage').val('');
+      $('#mediaContentList').children().remove(); 
     });
 
 
@@ -497,19 +521,24 @@ return false;
     $('body').on('change', '#postAddPhoto', function(token){
      App.UploadControllerMain(Func.cookies());
 
-     /*А через 3 сек происходит подгрузка фото в альбом*/
+     /*А через 3 сек происходит подгрузка фото в пост*/
 
      setTimeout(function() {
-      console.log('uwaevsdx');
-     //   var tab = $('.nav-link__albums').data('tab');
-     //   console.log(tab);
-     //   var albumID = $('[data-content =  ' + tab + ']').find('.active-album').attr('data-album-id');
-     //   console.log(albumID);
-     //   var url = NewPhoto;
-     //   console.log(url);
-     //   App.PhotoControllerPost(Func.cookies(), albumID, url);
-     //   App.PhotoController(Func.cookies(), albumID);
-   }, 3000);
+
+       var url = postAddPhoto;
+       console.log(url);
+     // var id = mediaId;
+     // console.log(id);
+     // var created = mediaCreated;
+     // console.log(created);
+  // Render.mediaContentList;
+  $('#mediaContentList').append('<li class="mediaContent__item" mediaContent-created="" data-photo-id="">\
+    <img src="'+url+'">\
+    </li>');
+
+  // App.addMedia();
+
+}, 1500);
    });
 
 
