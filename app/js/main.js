@@ -1475,7 +1475,7 @@ showNews: function () {
 						var emptyurl = data.news[i].post[j].mediaList[0] == null ? '' : data.news[i].post[j].mediaList[0].url;
 
 						$('.posts .wall__empty-item').append(
-							'<div class="post-item card-panel" data-id="' + data.news[i].post[j].id + '">' +
+							'<div class="post-item card-panel news" data-id="' + data.news[i].post[j].id + '">' +
 							'<div class="post-content">' +
 							'<div class="container-fluid"> ' +   
 							'<div class="row"> ' +   
@@ -1501,7 +1501,7 @@ showNews: function () {
 							comments +
 							'<div class="row posts__input-comment">' +
 							'<input type="text" class="comments-field" placeholder="Enter your comment">' +
-							'<button class="btn add-comment center" type="submit" name="">' +
+							'<button class="btn add-news-comment center" type="submit" name="">' +
 							'<i class="fa fa-comment"> </i>' +
 							'</button>' +
 							'</div>' +
