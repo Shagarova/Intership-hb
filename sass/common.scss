@@ -341,15 +341,23 @@ html ul{
 								}
 
 								& .camera{
-									height: 38px;
+									height: 34px;
 									width: 8%;
 									border-right: 1px solid lightgrey;
+									font-size:14px;
 									label{
-										width: 40px;
-										height: 40px;
+										width: 38px;
+										height: 34px;
+										border:1px solid lightgrey;
+										&:hover{
+											opacity: 0.7;
+											background-color: lightgrey;
+											cursor: pointer;
+										}
 										span{
-											width: 38px;
-											height: 38px;
+											width: 20px;
+											height: 20px;
+											top:10px;
 										}
 									}
 									form{
@@ -401,27 +409,49 @@ html ul{
 								&:not(:last-child){
 									border-bottom: 1px solid lightgrey;
 								}
-								.remove-post{
-									cursor: pointer;
-									margin-left:20px;
-								}
+								// .remove-post{
+								// 	cursor: pointer;
+								// 	margin-left:20px;
+								// 	float:right;
+								// }
 								.post-content{
 									border:1px solid lightgrey;
 									border-radius: 10px;
+									padding-top:10px;
 									.userPostname{
 										margin-top:10px;
+										text-align:left;
+										&--link{
+											text-decoration: none;
+											cursor: pointer;
+
+										}
+										.post-date{
+											// text-align:right;
+											float: right;
+											margin-left:60px;
+											font-size:11px;
+										}
 									}
 									.userPostLastname, .userPostFirstname{
-										font-size: 22px;
+										font-size: 14px;
 									}
-									img{
+									img.postUserPhoto{
 										border-radius: 50%;
-										width: 100px;
+										width: 65px;
 										float: left;
 									}
-									p{
+
+									img{
+										max-width: 300px;
+										margin-bottom: 10px;
+										margin-right: 10px;
+									}
+									p.textPost{
 										font-size: 16px;
-										padding-top: 30px;
+										padding-top: 10px;
+										text-align: left;
+										margin-bottom:10px;
 									}
 								}
 								.posts__input-comment{
@@ -543,6 +573,135 @@ html ul{
 	margin-left: 0px !important;
 
 }
+.chats {
+	text-align: left;
+	.chats-list {
+			display: block; // удалить
+			.chat {
+				position: relative;
+				padding: 5px;
+				border-radius: 5px;
+				margin-bottom: 5px;
+				border: 1px solid #e0e0e0;
+				transition: all 0.9s;
+				cursor: pointer;
+				div {
+					display: inline-block;
+				}
+				.user-name {
+					position: absolute;
+					font-weight: bold;
+					color: black;
+				}
+				.user-image {
+					img {
+						border-radius: 50%;
+						width: 80px;
+						height: 80px;
+					}
+				}
+				.text-message {
+					width: auto;
+					margin-left: 5px;
+					font-weight: bold;
+					color: #414141;
+				}
+				.chat-date {
+					position: absolute;
+					right: 10px;
+					font-size: 12px;
+					color: #818181;
+				}
+				.delete-chat {
+					position: absolute;
+					right: 10px;
+					top: 70px;
+					color: #ff6767;
+					font-weight: bold;
+					&:hover {
+						text-decoration: underline;
+					}
+				}
+				&:hover {
+					background: #d1f1ff;
+				}
+			}
+		}
+		.open-chat {
+			display: none; // удалить
+			.btn-back {
+				position: absolute;
+				top: 10px;
+				font-size: 30px;
+				color: #3097d1;
+				cursor: pointer;
+				transition: 0.3s;
+				&:hover {
+					color: #5bc0de;
+				}
+			}
+			.chat-persone {
+				text-align: center;
+				font-size: 17px;
+				font-weight: bold;
+			}
+			.input-form {
+				margin-bottom: 10px;
+				.form-control {
+					width: 80%;
+					float: left;
+					margin-top:0px;
+				}
+				span {
+					width: 20%;
+					button {
+						width: 100%;
+					}
+				}
+			}
+
+			.chat-message {
+				text-align: left;
+				position: relative;
+				padding: 5px;
+				border-radius: 5px;
+				margin-bottom: 5px;
+				transition: all 0.9s;
+				div {
+					display: inline-block;
+				}
+				.user-name {
+					position: absolute;
+					font-weight: bold;
+					color: black;
+				}
+				.user-image {
+					img {
+						border-radius: 50%;
+						width: 80px;
+						height: 80px;
+					}
+				}
+				.text-message {
+					width: auto;
+					margin-left: 5px;
+					font-weight: bold;
+					color: #414141;
+				}
+				.chat-date {
+					position: absolute;
+					right: 10px;
+					font-size: 12px;
+					color: #818181;
+				}
+			}
+		}
+	}
+
+
+
+
+
 }	
 
 
@@ -924,7 +1083,48 @@ small.search--small{
 
 
 
+// модальное окно
+.modal-overlay {
+	z-index: 10;
+	.modal-container {
+		background: white;
+		position: fixed;
+		margin-top: 5%;
+		border-radius: 5px;
+		animation: animModal .5s;
+		.close {
+			position: absolute;
+			right: 10px;
+			top: 5px;
+		}
+		.tittle-text {
+			margin-top: 5px;
+			font-weight: bold;
+		}
+		.contentModal {
+			margin-bottom: 5px;
+			.input-group {
+				margin-bottom: 10px;
+				input {
+					height: 34px;
+					margin-bottom: 5px;
+				}
+			}
+		}
+		hr {
+			margin: 5px;
+		}
+	}
+}
 
+
+@keyframes animModal {
+	from {
+		margin-top: -5%;
+	} to {
+		margin-top: 5%;
+	}
+}
 
 
 

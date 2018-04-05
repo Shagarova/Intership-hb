@@ -1,7 +1,7 @@
 	<div class="content__center col-xs-12 col-sm-12 col-md-6 col-lg-6">
 
 		<div class="wall">
-			
+
 			<ul class="wall__list" id="wall__list">
 				<li class="wall__list__item--empty">
 					<p>This will be your wall</p>
@@ -33,43 +33,79 @@
 								<input type="text" name="" class="form-control" id="massage" placeholder="Message">
 								<span class="input-group-btn camera">
 
-									<label for="postAddPhoto">1
-										<!-- <span class="glyphicon glyphicon-camera"> </span> -->
+									<label for="postAddPhoto">
+										<span class="glyphicon glyphicon-camera"> </span> 
 									</label>
 
 									<form method="post" class="createProfileForm" style="font-weight: normal; font-size: 16px;">
 										<input type="file" name="UploadForm[imageFile]" id="postAddPhoto" class="btn add-photo center" accept=".jpg, .jpeg, .png">
 									</form>
 
-											<!-- <button class="btn add-photo center" type="submit" name="">
-												<span class="glyphicon glyphicon-camera"> </span>
-											</button> -->
-										</span>
-										<span class="input-group-btn msg">
-											<button class="btn add-massege center" type="submit" name="">
-												<i class="fa fa-comment"> </i>
-											</button>
-										</span>
-										
-										
-									</div>
-								</div>
-							</div>
+	<!-- <button class="btn add-photo center" type="submit" name="">
+	<span class="glyphicon glyphicon-camera"> </span>
+</button> -->
+</span>
+<span class="input-group-btn msg">
+	<button class="btn add-massege center" type="submit" name="">
+		<i class="fa fa-comment"> </i>
+	</button>
+</span>
 
 
-							<div class="mediaContent" id="mediaContent">
-								<ul class="mediaContentList" id= "mediaContentList">
-								</ul>
-							</div>
+</div>
+</div>
+</div>
 
-							<!-- БЛОК ВЫВОДА ПОСТОВ И РЕЗУЛЬТАТОВ ПОИСКА -->
-							<div class="posts">
-								<div class="wall__empty-item card-content">
-									<p class="center posts__message"></p>
 
-								</div>
-							</div>
-						</li>
-					</ul>
-				</div>
+<div class="mediaContent" id="mediaContent">
+	<ul class="mediaContentList" id= "mediaContentList">
+	</ul>
+</div>
+
+<!-- БЛОК ВЫВОДА ПОСТОВ И РЕЗУЛЬТАТОВ ПОИСКА -->
+<div class="posts">
+	<div class="wall__empty-item card-content">
+		<p class="center posts__message"></p>
+
+	</div>
+</div>
+</li>
+
+
+<li class="chats">
+	<ul>
+		<li class="chats-list">
+			{{!-- <div class="chat" data-chat-id="1">
+				<div class="chat-date">29.03.2018</div>
+				<div class="user-image"><img src="img/no-image-user.jpg" alt=""></div>
+				<div class="user-name">firstname lastname</div>
+				<div class="text-message">приветlorem50</div>
+				<div class="delete-chat">delete chat</div>
 			</div>
+			<div class="chat" data-chat-id="1">
+				<div class="chat-date">29.03.2018</div>
+				<div class="user-image"><img src="img/no-image-user.jpg" alt=""></div>
+				<div class="user-name">firstname lastname</div>
+				<div class="text-message">приветlorem50</div>
+				<div class="delete-chat">delete chat</div>
+			</div> --}}
+		</li>
+
+		<li class="open-chat" data-chat-id="1">
+			<div class="btn-back"><span class="glyphicon glyphicon-chevron-left"></span></div>
+			<div class="chat-persone">firstname lastname</div>
+			<div class="input-form">
+				<input class="valeuMessage form-control" type="text" placeholder="Enter your message">
+				<span class="input-group-btn">
+					<button class="addMessage btn btn-info" type="button">Send</button>
+				</span>
+			</div>
+
+		</li>
+	</ul>
+
+</li>
+
+</ul>
+</div>
+</div>

@@ -55,8 +55,11 @@
       e.preventDefault();
       Render.createProfile();
       App.ProfilesControllerGet();
-      var tabalbums = $('.nav-link__albums').data('tab');
-      $('[data-content =  ' + tabalbums + ']').fadeIn();
+      setTimeout(function(){
+       var tabalbums = $('.nav-link__albums').data('tab');
+       $('[data-content =  ' + tabalbums + ']').fadeIn();
+     },1000)
+      
     });
 
     /*добавление аватарки*/
@@ -296,7 +299,9 @@ return false;
 
     /*закрываем окно с созданием альбома*/ /*работает*/
     $('body').on('click', '.modal-close', function(){
-      $('.modal').remove();
+      $('.modal').fadeTo(200, 0, function() {
+        $('.modal').remove();
+      });
     });
 
 
@@ -331,7 +336,7 @@ return false;
 
 
 
-    /*При клике на Upload photo - сначала происходит загрузка фото на сервер*/ /*не работает*/
+    /*При клике на Upload photo - сначала происходит загрузка фото на сервер*/ /*работает*/
     $('body').on('change', '#NewPhoto', function(token){
      App.UploadController(Func.cookies());
 
@@ -350,7 +355,7 @@ return false;
    });
 
 
-    /*фотографии ID*/ /*не работает*/
+    /*фотографии ID*/ /*работает*/
     $('body').on('click', '.photo__item', function(e){
       e.preventDefault();
       var photoID = $(this).attr('data-photo-id');
@@ -366,7 +371,7 @@ return false;
     });
 
 
-    /*удаление фотографий*/ /*не работает*/
+    /*удаление фотографий*/ /*работает*/
     $('body').on('click', '.modal-close.PhotoDelete', function(e){
       e.preventDefault();
       var tab = $('.nav-link__albums').data('tab');
@@ -499,7 +504,6 @@ return false;
 
     $('body').on('click', '.glyphicon', function(e) {
       e.preventDefault();
-      console.log('dsjkcdcs kj');
       App.showNews();
     });
 
@@ -523,10 +527,13 @@ return false;
         // App.addMedia();
       }
       $('#massage').val('');
+      postAddPhoto=[];
       $('#mediaContentList').children().remove(); 
     });
 
 
+
+    /*logout*/
     $('body').on('click', '.header__menu--link.logout', function (e) {
 
       e.preventDefault();
@@ -536,33 +543,133 @@ return false;
 
 
 
-    /*При клике на Upload photo - сначала происходит загрузка фото на сервер*/ /*не работает*/
+    /*При клике на камеру - сначала происходит загрузка фото на сервер*/ /*работает*/
     $('body').on('change', '#postAddPhoto', function(token){
      App.UploadControllerMain(Func.cookies());
 
-     /*А через 3 сек происходит подгрузка фото в пост*/
-
+     /*А через 1.5 сек происходит подгрузка фото в пост*/
      setTimeout(function() {
-
-       var url = postAddPhoto;
+      for(var i=0;i<postAddPhoto.length;i++){
+       var url = postAddPhoto[i];
        console.log(url);
-     // var id = mediaId;
-     // console.log(id);
-     // var created = mediaCreated;
-     // console.log(created);
-  // Render.mediaContentList;
-  $('#mediaContentList').append('<li class="mediaContent__item" mediaContent-created="" data-photo-id="">\
-    <img src="'+url+'">\
-    </li>');
-
-  // App.addMedia();
-
-}, 1500);
+     }
+     $('#mediaContentList').append('<li class="mediaContent__item" mediaContent-created="" data-photo-id="">\
+      <img src="'+url+'">\
+      </li>');
+   }, 1500);
    });
 
 
 
 
+    /*чаты*/
+
+    $('body').on('click', '.message', function() {
+      $('.chats').show();
+      $('.posts').hide();
+      $('.search').hide();
+    });
+
+// открыть чат
+$('body').on('click', '.chat', function() {
+  var chat_id = $(this).data('chat-id');
+  $('.valeuMessage').val(''); // очищаем input от сообщений
+
+  $('.chats-list').slideUp(300, function() {
+    $('.chat').remove();
+    $('.chats-list').hide();
+    $('.open-chat').slideDown(300);
+  });
+
+  localStorage.setItem('chat-id', chat_id);
+  App.getChat(token, chat_id);
+});
+
+// закрыть чат и вернутся на список чатов
+$('body').on('click', '.btn-back', function() {
+
+  $('.open-chat').slideUp(300, function() {
+    $('.chat-message').remove();
+    $('.open-chat').hide();
+    $('.chats-list').slideDown(300);
+  });
+
+  App.chats(token);
+});
+
+// удалить чат
+$('body').on('click', '.delete-chat', function(e) {
+  e.stopPropagation();
+  var chatId = $(this).parents('.chat').data('chat-id');
+  var thisBlock = $(this).parents('.chat');
+
+
+  thisBlock.fadeTo(300, 0, function() {
+    setTimeout(function() {
+      thisBlock.remove();
+      App.deleteChat(token, chatId);
+    },300);
+  });
+});
+
+// кнопка Start chat в списке друзей
+$('body').on('click', '.search__allFriends--startChat', function() {
+  var userId = $(this).parents('.search__allFriends').data('user-id');
+  localStorage.setItem('chatUserId', userId);
+
+  $('.modalFriends').remove();
+  $('.modal-overlay').remove();
+  Func.addModal();
+});
+
+// кнопка Start chat в списке врагов
+$('body').on('click', '.search__allEnemies--startChat', function() {
+  var userId = $(this).parents('.search__allFriends').data('user-id');
+  localStorage.setItem('chatUserId', userId);
+
+  $('.modalEnemies').remove();
+  $('.modal-overlay').remove();
+  Func.addModal();
+});
+
+// закрыть модальное окно
+$('body').on('click', '.close', function() {
+  $('.modal-overlay').fadeTo(200, 0, function() {
+    $('.modal-overlay').remove();
+  });
+});
+
+// Создать чат с сообщением
+$('body').on('click', '.btn-primary', function() {
+  var newMessage = $('.newMessage').val();
+  var userId = localStorage.getItem('chatUserId');
+
+
+  // создаем новое сообщение
+  App.newMessage(token, userId, newMessage);
+  localStorage.removeItem('chat-id');
+  $('.chat').remove(); // удаляем чаты
+  $('.modal-overlay').remove(); // удаляем модульное окно
+
+  // через 1с обновляем список чатов
+  setTimeout(function() {
+    App.chats(token);
+  }, 1000);
+});
+
+// Добавить сообщение в чат
+$('body').on('click', '.addMessage', function() {
+  var valueMessage = $('.valeuMessage').val();
+  var chatId = localStorage.getItem('chat-id');
+
+  App.sendMessage(token, valueMessage, chatId);
+  $('.chat-message').remove();
+
+  setTimeout(function() {
+    $('.valeuMessage').val(''); // очищаем input от сообщений
+    App.getChat(token, chatId);
+  }, 500);
+});
 
 
 
@@ -570,4 +677,23 @@ return false;
 
 
 
-  }());
+
+// нажимаем на имя друга в списке друзей
+$('body').on('click', '.friends__name', function() {
+  var friendId = $(this).data('user-id');
+  localStorage.setItem('friendUserId', friendId);
+  App.ProfileControllerGet(token, friendId);
+
+
+});
+
+
+
+
+
+
+
+
+
+
+}());
