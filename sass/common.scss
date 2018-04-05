@@ -89,7 +89,7 @@ html ul{
 			height: 33px;
 			color:#333;
 		}
-		
+
 		span.glyphicon-bell{
 			-webkit-transform:scale(1.4);
 			-moz-transform:scale(1.4);
@@ -278,11 +278,11 @@ html ul{
 
 
 
-	
 
 
 
-	
+
+
 /*центр*/
 
 &__center{
@@ -293,9 +293,9 @@ html ul{
 	// 	padding-right: 0px !important;
 	// }
 		// padding: 25px 10px;
-		
 
-		
+
+
 		.wall{
 			background-color: #fff;
 			border:1px solid lightgrey;
@@ -328,7 +328,7 @@ html ul{
 					.card{
 						&-content{
 							width: 100%;
-							
+
 							.wall__wall-item{
 								margin-bottom: 20px;
 								display: flex;
@@ -477,7 +477,7 @@ html ul{
 
 						}
 					}
-					
+
 				}
 				&:last-child{
 					border-bottom:0;
@@ -610,7 +610,7 @@ html ul{
 				.delete-chat {
 					position: absolute;
 					right: 10px;
-					top: 70px;
+					bottom: 0px;
 					color: #ff6767;
 					font-weight: bold;
 					&:hover {
@@ -661,24 +661,32 @@ html ul{
 				padding: 5px;
 				border-radius: 5px;
 				margin-bottom: 5px;
+				height: 90px;
 				transition: all 0.9s;
 				div {
 					display: inline-block;
 				}
 				.user-name {
 					position: absolute;
+					top: 0px;
+					left: 80px;
 					font-weight: bold;
 					color: black;
 				}
 				.user-image {
 					img {
+						position: absolute;
+						top: 0;
+						left: 0;
 						border-radius: 50%;
 						width: 80px;
 						height: 80px;
 					}
 				}
 				.text-message {
-					width: auto;
+					position: absolute;
+					top: 30px;
+					left: 85px;
 					margin-left: 5px;
 					font-weight: bold;
 					color: #414141;
@@ -697,7 +705,7 @@ html ul{
 
 
 
-}	
+}
 
 
 
@@ -735,7 +743,7 @@ small.search--small{
 	}
 	&__result--found{
 		-webkit-display: flex;
-		-ms-display: flex; 
+		-ms-display: flex;
 		display: flex;
 		-webkit-flex-wrap: wrap;
 		-ms-flex-wrap: wrap;
@@ -764,9 +772,9 @@ small.search--small{
 							border: 3px solid #fff;
 							border-radius: 100%;
 							box-shadow: 0 1px 1px rgba(0,0,0,.1);
-							margin:-70px auto 5px auto;				
+							margin:-70px auto 5px auto;
 						}
-						
+
 					}
 					&--name{
 						font-weight: bold;
@@ -787,7 +795,7 @@ small.search--small{
 						margin-bottom: 15px;
 					}
 					&--unfollow,
-					&--follow, 
+					&--follow,
 					&--block{
 						// position:absolute;
 						background:transparent;
@@ -807,7 +815,7 @@ small.search--small{
 					}
 				}
 			}
-			
+
 		}
 		&__right{
 
@@ -826,7 +834,7 @@ small.search--small{
 					width: 20px;
 					height: 14px;
 				}
-				
+
 				&__caption{
 					padding: 20px 0px 0px 20px;
 					font-weight: bold;
@@ -842,7 +850,7 @@ small.search--small{
 							min-height: 100px;
 							// border-bottom:1px solid lightgrey;
 						}
-						
+
 						.container-fluid{
 							padding:0px;
 						}
@@ -864,7 +872,7 @@ small.search--small{
 								font-weight: bold;
 								font-size:13px;
 								text-decoration: none;
-								
+
 							}
 							.friends__buttons{
 								margin-top:10px;
@@ -884,7 +892,7 @@ small.search--small{
 										color:#fff;
 									}
 								}
-								
+
 							}
 
 						}
@@ -948,13 +956,13 @@ small.search--small{
 
 .search__result--found--Friends, .search__result--found--Enemies{
 	-webkit-display: flex;
-	-ms-display: flex; 
+	-ms-display: flex;
 	display: flex;
 	-webkit-flex-wrap: wrap;
 	-ms-flex-wrap: wrap;
 	flex-wrap: wrap;
 	.search__allFriends, .search__allEnemies{
-		
+
 		margin:10px 10px 10px 0px;
 		border-radius:4px;
 		width: 100%;
@@ -982,9 +990,9 @@ small.search--small{
 							border: 3px solid #fff;
 							border-radius: 100%;
 							box-shadow: 0 1px 1px rgba(0,0,0,.1);
-							margin:0px 20px 5px 10px;				
+							margin:0px 20px 5px 10px;
 						}
-						
+
 					}
 					&--name{
 						font-weight: bold;
@@ -1008,7 +1016,7 @@ small.search--small{
 						margin-bottom: 15px;
 					}
 					&--unfollow,
-					&--follow, 
+					&--follow,
 					&--block,
 					&--startChat{
 						// position:absolute;
@@ -1166,7 +1174,7 @@ small.search--small{
 					}
 				}
 			}
-		}	
+		}
 
 	}
 
@@ -1234,12 +1242,12 @@ small.search--small{
 }
 @media screen and (max-width: 767px) {
 	/*скрываем input search*/
-	
+
 	.header{
 		.navbar-form{
-			
+
 			display: none;
-			
+
 			&>.navbar-right{
 				display: none;
 			}
@@ -1255,10 +1263,10 @@ small.search--small{
 			margin-bottom:60px;
 			.friends{
 				&__list{
-					
+
 					&__item{
 						.friends__logo{
-							
+
 							&>img{
 								width: 80%;
 							}
@@ -1315,9 +1323,6 @@ small.search--small{
 					}
 				}
 			}
-		}	
+		}
 	}
 }
-
-
-
