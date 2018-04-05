@@ -1507,7 +1507,7 @@ showNews: function () {
 							'</div>' +
 							'<p class="right-align posts__buttons">' +
 							'<a href="comment-post">Сomment</a>' +
-							'<a href="remove-post">Remove</a>' +
+							'<a href="remove-news-post">Remove</a>' +
 							'</p>' +
 							'</div>'
 							);

@@ -514,6 +514,12 @@ return false;
       if (text != 0) App.addNewsComment($(this).parent().parent().find('.comments-field').val(), postId);
     });
 
+    $('body').on('click', '[href=remove-news-post]', function (e) {
+      var postId = $(this).parent().parent().attr("data-id");
+      e.preventDefault();
+      $(this).parent().parent().remove();
+    });
+
     $('body').on('click', '.remove-comment', function (e) {
       var postId = $(this).closest('.posts__comments').attr("data-comment-id");
       e.preventDefault();
