@@ -1,6 +1,6 @@
 var globalPhoto;
 var NewPhoto;
-var postAddPhoto;
+var postAddPhoto = [];
 var id = localStorage.getItem('user_id');
 var token = Func.cookies();
 var arr;
@@ -65,7 +65,7 @@ var App = {
 				var date = new Date(new Date().getTime() + 86400 * 1000);
 				document.cookie = 'session-token=' + data.token + '; expires=' + date.toUTCString();
 				localStorage.userID = data.profile.user_id;
-
+				localStorage.setItem('user_id', data.profile.id);
 
 			},
 			error: function (xhr, status, error) {
@@ -139,7 +139,7 @@ var App = {
 				bearer: token
 			},
 			success: function (data) {
-				localStorage.setItem('user_id', data.profile.id);
+				// localStorage.setItem('user_id', data.profile.id);
 				$('.firstname').html(data.profile.firstname);
 				$('.lastname').html(data.profile.lastname);
 				$('.quote').html(data.profile.quote);
@@ -168,6 +168,13 @@ var App = {
      $('.search__allFriends').children().remove();
      App.showPosts();
      App.AlbumController(token);
+     App.chats(token); // получаем все чаты
+     
+     // setTimeout(function(){
+     // 	App.ProfileControllerGet(id);
+     // }, 500);
+
+
      /*если количество друзей не 0, то убираем пустой элемент с текстом, что ничего не найдено*/
      if(data.friends_count!==0){
      	$('.friends__list__item.empty').css({
@@ -226,35 +233,36 @@ error: function (xhr, status, error) {
 }
 });
 
-	},
+},
 
 
 
 
-	ProfileControllerGet:  function(token){
+ProfileControllerGet:  function(token, id){
 
-		console.log(id);
-		$.ajax({
-			url: 'http://restapi.fintegro.com/profiles/' + id +' ',
-			method: 'GET',
-			dataType: 'json',
-			headers: {
-				bearer: token
-			},
-			success: function (data) {
-				console.log(data);
-			},
-			error: function (xhr, status, error) {
-				console.log('ERROR!!!', xhr, status, error);
-			}
-		});
-	},
+	console.log(id);
+	$.ajax({
+		url: 'http://restapi.fintegro.com/profiles/' + id +' ',
+		method: 'GET',
+		dataType: 'json',
+		headers: {
+			bearer: token
+		},
+		success: function (data) {
+			console.log(data);
+			App.ProfilesControllerGet();
+		},
+		error: function (xhr, status, error) {
+			console.log('ERROR!!!', xhr, status, error);
+		}
+	});
+},
 
-	/*Добавление файлов*/
-	UploadController:  function(token){
-		var form = new FormData();
-		form.append('UploadForm[imageFile]', ($('#profilePhoto')[0].files[0]));
-		form.append('UploadForm[imageFile]', ($('#NewPhoto')[0].files[0]));
+/*Добавление файлов*/
+UploadController:  function(token){
+	var form = new FormData();
+	form.append('UploadForm[imageFile]', ($('#profilePhoto')[0].files[0]));
+	form.append('UploadForm[imageFile]', ($('#NewPhoto')[0].files[0]));
 		// form.append('UploadForm[imageFile]', ($('#postAddPhoto')[0].files[0]));
 
 		$.ajax({
@@ -298,8 +306,9 @@ error: function (xhr, status, error) {
 			},
 			data: form,
 			success: function (data) {
-				console.log(data);
-				postAddPhoto = data.link
+				console.log(data.link);
+				postAddPhoto.push(data.link);
+				console.log(postAddPhoto);
 				console.log($('#postAddPhoto')[0].files[0]);
 			},
 			error: function (xhr, status, error) {
@@ -626,6 +635,7 @@ error: function(data){
     /*удаляем из поиска другие результаты поиска*/
     $('.search__result--found').children().remove();
     $('.posts').hide();
+    $('.chats').hide();
     /*если количество результатов поиска не 0, то убираем пустой элемент с текстом, что ничего не найдено*/
     if(data.profiles.length!==0){
     	$('.search__result--empty').css({
@@ -962,32 +972,34 @@ error:function (xhr, status, error) {
 
 //Добавление поста
 addPost: function addPost() {
-	// arr = [postAddPhoto];
-	
 
 	console.log(postAddPhoto);
+	/*создаем массив, в котором перебираем элементы из массива, в который загружаются фотографии*/
+	var media = [];
+
+	for (var i = 0; i < postAddPhoto.length; i++) {
+		media.push({
+			url: postAddPhoto[i]
+		});
+	}
+
 	$.ajax({
 		url: 'http://restapi.fintegro.com/posts',
 		method: 'POST',
 		dataType: 'json',
 		data: {
 			text: $('#massage').val(),
-			media: [{
-				url:postAddPhoto
-			}],
-			// {
-			// 	url:postAddPhoto
-			// },
-			// {
-			// 	url:postAddPhoto
-			// }]
+			media: media
 		},
 		headers: {
 			bearer: token
 		},
 		success: function (data) {
 
-			App.showPosts();
+			// for(var i=0; i<postAddPhoto.length;i++){
+				App.showPosts();
+			// }
+
 			console.log(data);
 			// console.log(data.mediaList.url);
 		},
@@ -996,6 +1008,10 @@ addPost: function addPost() {
 		}
 
 	});
+
+	// }
+	
+
 },
 // addMedia: function addPost() {
 // 	$.ajax({
@@ -1145,7 +1161,7 @@ showPosts: function showPosts() {
 			console.log(data.posts);
 
 
-
+			$('.chats').hide();
 
 
 			// /*добавила*/
@@ -1186,58 +1202,66 @@ showPosts: function showPosts() {
 						comments += '<div class="row posts__comments" data-comment-id = "' + data.posts[i].comments[j].id + '">' +
 						'<div class="container-fluid"> ' +   
 						'<div class="row"> ' +   
-						'<div class="col-lg-3 col-md-3 col-sm-3 col-xs-4"> ' +   
+						'<div class="col-lg-2 col-md-2 col-sm-2 col-xs-4"> ' +   
 						'<img src="' + data.posts[i].comments[j].user.photo + '" alt="" class="postUserPhoto">' +
 						'</div> ' +   
-						'<div class="col-lg-9 col-md-9 col-sm-9 col-xs-8"> ' + 
+						'<div class="col-lg-10 col-md-10 col-sm-10 col-xs-8"> ' + 
 						'<div class="userCommentname"> ' +   
 						'<span class="userCommentLastname"> ' + data.posts[i].user.lastname + ' </span>' +
 						'<span class="userCommentFirstname"> ' + data.posts[i].user.firstname + ' </span>' + 
 						'<i class="remove-comment">x</i>' + 
 						' </div>' +
-						'<p>' + data.posts[i].comments[j].text +  
+						'<p class="textComment">' + data.posts[i].comments[j].text +  
 						'</p>' +
 						' </div>' +
 						' </div>' +
 						' </div>' +
 						'</div>';
 					}
-
+					photos = '';
+					for (var p = 0; p < data.posts[i].mediaList.length; p++) {
+						var emptyurl = data.posts[i].mediaList[p] == null ? '' : data.posts[i].mediaList[p].url;
+						photos+= '<img src="' + emptyurl +'">';
+					}
 					// for (var t = 0; t<data.posts[i].mediaList.length; t++){
+						var emptyurl = data.posts[i].mediaList[0] == null ? '' : data.posts[i].mediaList[0].url;
 						$('.posts .wall__empty-item').append(
 							'<div class="post-item card-panel" data-id="' + data.posts[i].id + '">' +
 							'<div class="post-content">' +
 							'<div class="container-fluid"> ' +   
 							'<div class="row"> ' +   
-							'<div class="col-lg-3 col-md-3 col-sm-3 col-xs-4"> ' + 
+							'<div class="col-lg-2 col-md-2 col-sm-2 col-xs-4"> ' + 
 							'<img src="' + data.posts[i].user.photo + '" alt="" class="postUserPhoto">' +
 							' </div>' +
-							'<div class="col-lg-9 col-md-9 col-sm-9 col-xs-8"> ' + 
-							'<div class="userPostname"> ' +   
+							'<div class="col-lg-10 col-md-10 col-sm-10 col-xs-8"> ' + 
+							'<div class="userPostname"> ' +  
+							'<a class="userPostname--link">' +
 							'<span class="userPostLastname"> ' + data.posts[i].user.lastname + ' </span>' +
 							'<span class="userPostFirstname"> ' + data.posts[i].user.firstname + ' </span>' + 
-							'<i class="remove-post">x</i>' + 
+							'</a>' +
+							'<span class="post-date">'+ data.posts[i].date +'</span>'+
+							// '<i class="remove-post">x</i>' + 
 							' </div>' +
-							'<p>' + data.posts[i].text + '</p>' +
-						// '<img src="" class="photomedia">' +
-						'<img src="' + data.posts[i].mediaList[0].url +'">' +
-						'</div>' +
-						'</div>' +
-						'</div>' +
-						'</div>' +
-						comments +
-						'<div class="row posts__input-comment">' +
-						'<input type="text" class="comments-field" placeholder="Enter your comment">' +
-						'<button class="btn add-comment center" type="submit" name="">' +
-						'<i class="fa fa-comment"> </i>' +
-						'</button>' +
-						'</div>' +
-						'<p class="right-align posts__buttons">' +
-						'<a href="comment-post">Сomment</a>' +
-						'<a href="remove-post">Remove</a>' +
-						'</p>' +
-						'</div>'
-						);
+							'<p class="textPost">' + data.posts[i].text + '</p>' +
+							photos+
+							// '<img src="' + emptyurl +'">' +
+							'</div>' +
+							'</div>' +
+							'</div>' +
+							'</div>' +
+							comments +
+							'<div class="row posts__input-comment">' +
+							'<input type="text" class="comments-field" placeholder="Enter your comment">' +
+							'<button class="btn add-comment center" type="submit" name="">' +
+							'<i class="fa fa-comment"> </i>' +
+							'</button>' +
+							'</div>' +
+							'<p class="right-align posts__buttons">' +
+							'<a href="comment-post">Сomment</a>' +
+							'<a href="remove-post">Remove</a>' +
+							'</p>' +
+							'</div>'
+							);
 					// }
 				}
 			}
@@ -1247,5 +1271,111 @@ showPosts: function showPosts() {
 		}
 	});
 }, 
+
+// чаты
+chats: function(token) {
+	$.ajax({
+		url: 'http://restapi.fintegro.com/chats',
+		method: 'GET',
+		dataType: 'json',
+		headers: {
+			bearer: token
+		},
+		success: function(data) {
+        // $('.chat').remove();
+        Func.createChatBlock(data);
+    },
+    error: function(data) {
+    	console.log(data);
+    }
+});
+},
+
+  // новое сообщение
+  newMessage: function(token, user_id, message) {
+  	$.ajax({
+  		url: 'http://restapi.fintegro.com/chats',
+  		method: 'POST',
+  		dataType: 'json',
+  		headers: {
+  			bearer: token
+  		},
+  		data: {
+  			user_id: user_id,
+  			message: message
+  		},
+  		success: function(data) {
+  			console.log('Новое сообщение: ', data.id);
+
+  			localStorage.setItem('chat-id', data.id);
+  		},
+  		error: function(data) {
+  			console.log(data);
+  		}
+  	});
+  },
+
+  // просмотр сообщений в чате
+  getChat: function(token, chat_id) {
+  	$.ajax({
+  		url: 'http://restapi.fintegro.com/chats/'+ chat_id +'',
+  		method: 'GET',
+  		dataType: 'json',
+  		headers: {
+  			bearer: token
+  		},
+  		success: function(data) {
+  			var chatUserId = data.chat.chat_users;
+
+        // Выводим имя и фамилию пользователя с которым общаемся
+        if (id == chatUserId[0].user_id) {
+        	$('.chat-persone').html(chatUserId[1].firstname + ' ' + chatUserId[1].lastname);
+        } else {
+        	$('.chat-persone').html(chatUserId[0].firstname + ' ' + chatUserId[0].lastname);
+        }
+
+        // Создаем блоки с сообщениями
+        Func.createMessageBlock(data);
+    },
+    error: function(data) {
+    	console.log(data);
+    }
+});
+  },
+
+  // отправить сообщение в чат
+  sendMessage: function(token, message, chat_id) {
+  	$.ajax({
+  		url: 'http://restapi.fintegro.com/chats/' + chat_id,
+  		method: 'PUT',
+  		dataType: 'json',
+  		headers: {
+  			bearer: token
+  		},
+  		data: {
+  			message: message
+  		},
+  		success: function(data) {
+  			console.log('Отправленное сообщение в чат: ', data);
+  		},
+  		error: function(data) {
+  			console.log(data);
+  		}
+  	});
+  },
+
+  deleteChat: function(token, chat_id) {
+  	$.ajax({
+  		url: 'http://restapi.fintegro.com/chats/'+ chat_id +'',
+  		method: 'DELETE',
+  		dataType: 'json',
+  		headers: {
+  			bearer: token
+  		},
+  		success: function(data) {
+  			console.log('Чат id="'+ chat_id +'" удалён');
+  		}
+  	});
+  }
 
 };
