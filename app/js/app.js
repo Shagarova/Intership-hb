@@ -53,10 +53,10 @@
 
     $('body').on('click', '.user__edit.user__albums', function(e) {
       e.preventDefault();
-      Render.createProfile();
-      App.ProfilesControllerGet();
-      var tabalbums = $('.nav-link__albums').data('tab');
-      $('[data-content =  ' + tabalbums + ']').fadeIn();
+      Render.createProfile('.nav-link__albums');
+      // App.ProfilesControllerGet();
+      // var tabalbums = $('.nav-link__albums').data('tab');
+      // $('[data-content =  ' + tabalbums + ']').fadeIn();
     });
 
     /*добавление аватарки*/
@@ -212,8 +212,8 @@
           <button class="modal-edit" style="background-color: blue; color: rgb(255, 255, 255);">Create</button>\
           </div>\
           </div>');
+          
       });
-
 
     /*при нажатии на конкретный альбом*/
 
@@ -276,6 +276,9 @@ return false;
     $('body').on('click', '.nav-link__new-album', function(){
       console.log('qq');
       var tabalbums = $('.nav-link__albums').data('tab');
+      $('.new').remove();
+      $(".breadcrumbs").append("<span class='new'> > </span><a href='#' class='new breadcrumbs-album' >Albums</a><span class='new'> > </span><a href='#' class='new breadcrumbs-newAlbum'>New album</a>");
+      $('.nav-link__new-album').css('display', 'inline-block');
       $('[data-content =  ' + tabalbums + ']').fadeIn();
     });
     /**/
@@ -382,29 +385,91 @@ return false;
       return false;
     });
 
+$('body').on('click', '.header__menu--item', function(e){
 
+  sessionStorage.removeItem('tabName');
+  sessionStorage.removeItem('activeTab'); 
+
+  if ($(this).hasClass('profile')){
+    console.log($(this));
+    $('.nav-link[data-tab="profile"]').trigger('click');
+  
+  } // тоже не срабатывает!!! не записывает в session storage ничего, хотя должен по идее. 
+ 
+});
+
+/* Клики на хлебные крошки */
+$('body').on('click', '.breadcrumbs-main', function(e){
+
+  sessionStorage.removeItem('tabName');
+  sessionStorage.removeItem('activeTab'); 
+ 
+});
+
+$('body').on('click', '.breadcrumbs-profile', function(e){
+
+  $('.nav-link[data-tab="profile"]').trigger('click');
+ 
+});
+
+$('body').on('click', '.breadcrumbs-album', function(e){
+
+  $('.nav-link[data-tab="albums"]').trigger('click');
+ 
+});
+
+$('body').on('click', '.breadcrumbs-newAlbum', function(e){
+
+  $('.nav-link[data-tab="new-album"]').trigger('click');
+ 
+});
+
+
+/*окончание хлебных крошек */
 
     $('body').on('click', '.nav-link', function(e){
 
       var tab = $(this).data('tab');
+      var activeTab = '.' + this.classList[1];
+
+      sessionStorage.setItem('tabName', tab);
+      sessionStorage.setItem('activeTab', activeTab);
 
       if(tab!=='new-album'){
+        $('.modal').remove();
+        $('.modal-overlay').remove();
         $('[data-content]').fadeOut();
         setTimeout(function(){
           $('[data-content =  ' + tab + ']').fadeIn();
         },500);
+        sessionStorage.setItem('tabName', tab);
+        sessionStorage.setItem('activeTab', activeTab);
+      }
+
+      if(tab=='profile'){
+        $('.new').remove();
+        $(".breadcrumbs").append("<span class='new'> > </span><a href='#' class='new'>Profile</a>");
+        sessionStorage.setItem('tabName', tab);
+        sessionStorage.setItem('activeTab', activeTab);
+      }
+
+      if(tab=='albums'){
+        $('.modal').remove();
+        $('.new').remove();
+        sessionStorage.setItem('tabName', tab);
+        sessionStorage.setItem('activeTab', activeTab);
+        $(".breadcrumbs").append("<span class='new'> > </span><a href='#' class='new breadcrumbs-album'>Albums</a>");
       }
 
 
       if(tab=='new-photo'){
         e.stopPropagation();
         console.log('Новое фото загружать сейчас будем');
-        var tabNewPhoto = $('.nav-link__photos').data('tab');
+        $(".breadcrumbs").append("<span class='new'> > </span><a href='#' class='new breadcrumbs-album'>Albums</a><span class='new'> > </span><a href='#' class='new breadcrumbs-newAlbum'>New album</a>");        var tabNewPhoto = $('.nav-link__photos').data('tab');
+        sessionStorage.setItem('tabName', tab);
+        sessionStorage.setItem('activeTab', activeTab);
         $('[data-content =  ' + tabNewPhoto + ']').fadeIn();
-
-
       }
-      /**/
 
       $('a').removeClass('active');
       $('label').removeClass('active');
@@ -456,7 +521,6 @@ return false;
 
 
     });
-
 
     /*конец*/
 
@@ -516,7 +580,15 @@ return false;
     });
 
 
+    $('body').on('click', '.header__menu--item.profile>.header__menu--link', function (e) {
 
+      e.preventDefault();
+      $('.new').remove();
+      $(".breadcrumbs").append("<span class='new'> > </span><a href='#' class='new breadcrumbs-profile'>Profile</a>");
+
+    });
+
+  
     /*При клике на Upload photo - сначала происходит загрузка фото на сервер*/ /*не работает*/
     $('body').on('change', '#postAddPhoto', function(token){
      App.UploadControllerMain(Func.cookies());
@@ -542,11 +614,35 @@ return false;
    });
 
 
+ /* Когда пользователь обновляет страницу, чтобы оставаться на той же вкладке (табе), на которой он остановился*/ 
+    function initCreateProfilePage() {
+      var tokenTabName = sessionStorage.getItem('tabName');
+      if (tokenTabName){
+          Render.createProfile(sessionStorage.getItem('activeTab')? sessionStorage.getItem('activeTab'): undefined);
+      }
+      else {
+        $('[data-tab="profile"]').trigger('click');
+      }
+
+      
+      /* var activeNewAlbum = $('[data-tab="new-album"]')
+      if (tokenTabName=='new-album') {
+        $(activeNewAlbum).addClass('active');
 
 
+      $('.active').siblings().css({
+        'fontWeight' : 'normal',
+        'fontSize' : '16px'
+      })
+      } */
 
+    };
+    
+    $(function(){
+      initCreateProfilePage();
+    }); 
 
-
+    /*окончание функции*/
 
 
 

@@ -68,12 +68,12 @@ var Render = {
     this.createRoute('views/modules/header-nav-authorized.hbs', App.header);
   },
 
-  createProfile: function(){
-    this.createRoute('views/pages/createProfile.hbs', App.section);
+  createProfile: function(tab){
+    this.createRoute('views/pages/createProfile.hbs', App.section, null, tab);
   },
 
 
-  createRoute: function (url, container, context) {
+  createRoute: function (url, container, context, tab) {
     var template;
 
     $.get(url, function (response) {
@@ -83,6 +83,9 @@ var Render = {
         template = template(context);
       }
       container.html(template);
+      if (tab) {
+        $(tab).trigger('click');
+      }
     });
   }
 };
