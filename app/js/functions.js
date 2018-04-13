@@ -180,5 +180,79 @@ var Func = {
 		$('.modal.Success').fadeIn(1000).delay(3000).fadeOut(1000, function(){$(this).remove()});
 	},
 
+	// создание блока с сообщением
+	createMessageBlock: function createMessageBlock(data) {
+		var user1 = data.chat.chat_users[0],
+		user2 = data.chat.chat_users[1],
+		messages = data.chat.messages,
+		messageLength = messages.length;
+
+  // цыкл вывода сообщений в чате
+  for (var i = 0; i < messageLength; i++) {
+  	var user,
+  	message = data.chat.messages[i],
+  	messageUserId = message.sender_id;
+
+    // проверям какой пользователь написал сообщение и присваиваем его данные в user
+    if (messageUserId == user1.user_id) {
+    	user = user1;
+    } else if (messageUserId == user2.user_id) {
+    	user = user2;
+    }
+
+    $('.open-chat').append('\
+    	<div class="chat-message" data-message-id="'+ message.chat_id +'">\
+    	<div class="chat-date">'+ message.date +'</div>\
+    	<div class="user-image"><img src="'+ user.photo +'" alt=""></div>\
+    	<div class="user-name">'+ user.firstname +' '+ user.lastname +'</div>\
+    	<div class="text-message">'+ message.message +'</div>\
+    	</div>');
+}
+},
+
+
+// Добавляет модальное окно для ввода сообщения
+addModal: function addModal() {
+	$('body').append('<div class="modal-overlay">\
+		<div class="container-fluid">\
+		<div class="row">\
+		<div class="modal-container col-xs-4  col-xs-offset-4">\
+		<div class="close"><span class="glyphicon glyphicon-remove"></span></div>\
+		<div class="title-modal-NewChat">\
+		<div class="tittle-text">New chat</div>\
+		</div>\
+		<hr>\
+		<div class="contentModal col-xs-12">\
+		<div class="container">\
+		<div class="row">\
+		<div class="input-group">\
+		<input class="newMessage col-xs-12 col-md-12 col-lg-12" type="text" placeholder="Enter your message">\
+		<button type="button" class="btn btn-primary col-xs-12 col-md-12 col-lg-12">Send</button>\
+		</div>\
+		</div>\
+		</div>\
+		</div>\
+		</div>\
+		</div>\
+		</div>\
+		</div>');
+},
+
+// создает блок с чатом
+createChatBlock: function createChatBlock(data) {
+	for (var i = data.chats.length - 1; i >= 0; i--) {
+		var chat = data.chats[i];
+
+		$('.chats-list').append('<div class="chat" data-chat-id="'+ chat.chat_id +'">\
+			<div class="chat-date">'+ chat.last_mes.date +'</div>\
+			<div class="user-image"><img src="'+ chat.chat_users[0].photo +'" alt=""></div>\
+			<div class="user-name">'+ chat.chat_users[0].firstname +' '+ chat.chat_users[0].lastname +'</div>\
+			<div class="text-message">'+ chat.last_mes.message +'</div>\
+			<div class="delete-chat">delete chat</div>\
+			</div>');
+	}
+}
+
+
 };
 

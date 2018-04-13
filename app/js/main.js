@@ -1,7 +1,7 @@
 console.log ('123');
 var globalPhoto;
 var NewPhoto;
-var postAddPhoto;
+var postAddPhoto = [];
 var id = localStorage.getItem('user_id');
 var token = Func.cookies();
 var arr;
@@ -66,7 +66,7 @@ var App = {
 				var date = new Date(new Date().getTime() + 86400 * 1000);
 				document.cookie = 'session-token=' + data.token + '; expires=' + date.toUTCString();
 				localStorage.userID = data.profile.user_id;
-
+				localStorage.setItem('user_id', data.profile.id);
 
 			},
 			error: function (xhr, status, error) {
@@ -114,33 +114,33 @@ var App = {
 			success: function (data) { 
 				$('body').append('<div class="ReestablishEmail">На Ваш email отправлен пароль </div>');
 				$('.ReestablishEmail').fadeIn(600).delay(600).fadeOut(100, function(){$(this).remove()});
-				document.getElementById("emailEmail").value = "";
-			},
-			error: function (xhr, status, error) {
-				console.log('вашего логина не существует', xhr, status, error);
-			}
-		});
+		document.getElementById("emailEmail").value = "";
 	},
+	error: function (xhr, status, error) {
+		console.log('вашего логина не существует', xhr, status, error);
+	}
+});
+},
 
-	logout: function() {
-		document.cookie = "session-token=;expires=Thu, 01 Jan 1970 00:00:01 GMT";
-		App.init();
-	},
+logout: function() {
+	document.cookie = "session-token=;expires=Thu, 01 Jan 1970 00:00:01 GMT";
+	App.init();
+},
 
 
 
-	ProfilesControllerGet: function(){
-		
+ProfilesControllerGet: function(){
 
-		$.ajax({
-			url: 'http://restapi.fintegro.com/profiles',
-			method: 'GET',
-			dataType: 'json',
-			headers: {
-				bearer: token
-			},
-			success: function (data) {
-				localStorage.setItem('user_id', data.profile.id);
+
+	$.ajax({
+		url: 'http://restapi.fintegro.com/profiles',
+		method: 'GET',
+		dataType: 'json',
+		headers: {
+			bearer: token
+		},
+		success: function (data) {
+				// localStorage.setItem('user_id', data.profile.id);
 				$('.firstname').html(data.profile.firstname);
 				$('.lastname').html(data.profile.lastname);
 				$('.quote').html(data.profile.quote);
@@ -169,6 +169,13 @@ var App = {
      $('.search__allFriends').children().remove();
      App.showPosts();
      App.AlbumController(token);
+     App.chats(token); // получаем все чаты
+     
+     // setTimeout(function(){
+     // 	App.ProfileControllerGet(id);
+     // }, 500);
+
+
      /*если количество друзей не 0, то убираем пустой элемент с текстом, что ничего не найдено*/
      if(data.friends_count!==0){
      	$('.friends__list__item.empty').css({
@@ -227,35 +234,122 @@ error: function (xhr, status, error) {
 }
 });
 
-	},
+},
 
 
 
 
-	ProfileControllerGet:  function(token){
+ProfileControllerGet:  function(token, id){
 
-		console.log(id);
-		$.ajax({
-			url: 'http://restapi.fintegro.com/profiles/' + id +' ',
-			method: 'GET',
-			dataType: 'json',
-			headers: {
-				bearer: token
-			},
-			success: function (data) {
-				console.log(data);
-			},
-			error: function (xhr, status, error) {
-				console.log('ERROR!!!', xhr, status, error);
-			}
-		});
-	},
+	console.log(id);
+	$.ajax({
+		url: 'http://restapi.fintegro.com/profiles/' + id +' ',
+		method: 'GET',
+		dataType: 'json',
+		headers: {
+			bearer: token
+		},
+		success: function (data) {
+			localStorage.setItem('user_id', data.profile.id);
+			$('.firstname').html(data.profile.firstname);
+			$('.lastname').html(data.profile.lastname);
+			$('.quote').html(data.profile.quote);
+			$('.userPhotoMini').attr('src', data.profile.photo);
+			$('.went').html( data.profile.went);
+			$('.lived').html( data.profile.lived);
+			$('.from').html(data.profile.from);
+			$('.count__friends').html(data.friends_count);
+			$('.count__enemies').html(data.enemies_count);
 
-	/*Добавление файлов*/
-	UploadController:  function(token){
-		var form = new FormData();
-		form.append('UploadForm[imageFile]', ($('#profilePhoto')[0].files[0]));
-		form.append('UploadForm[imageFile]', ($('#NewPhoto')[0].files[0]));
+     // $('.user__albums__items').html()
+     /*данные со страницы редактирования профиля*/
+     $('.profile__firstname').html(data.profile.firstname);
+     $('.profile__lastname').html(data.profile.lastname);
+     $('input.firstname').val(data.profile.firstname);
+     $('input.lastname').val(data.profile.lastname);
+     $('.userPhotoMini').attr('src', data.profile.photo);
+    // $('.userPhotoMini').html('<img src="' + data.profile.photo +'">');
+    $('input.quote').val( data.profile.quote);
+    $('input.went').val( data.profile.went);
+    $('input.lived').val( data.profile.lived);
+    $('input.from').val(data.profile.from);
+
+     //  /*добавляем наших друзей справа сверху в список*/
+     $('.friends__list').children().remove();
+     $('.search__allFriends').children().remove();
+     App.showPosts();
+     App.AlbumController(token);
+     App.chats(token); // получаем все чаты
+     
+     // setTimeout(function(){
+     // 	App.ProfileControllerGet(id);
+     // }, 500);
+
+
+     /*если количество друзей не 0, то убираем пустой элемент с текстом, что ничего не найдено*/
+     if(data.friends_count!==0){
+     	$('.friends__list__item.empty').css({
+     		'display':'none'
+     	});
+
+     	/*проходим массивом по результатам поиска*/
+     	for (var i=0; i<data.friends.length; i++) {
+     		var friends = data.friends[i];
+
+     		/*функция по выводу информации про друзей справа сверху*/
+     		function yourFriends(id, lastname, firstname, quote, photo, lived, form, went, friend){
+     			$('.friends__list').append('<li class="friends__list__item followers" data-user-id="' + id + '">\
+     				<div class="container-fluid">\
+     				<div class="row">\
+     				<div class="friends__logo col-lg-3 col-md-3 col-sm-2 col-xs-2"> <img src=" ' + photo + ' "></div>\
+     				<div class="col-lg-9 col-md-9 col-sm-10 col-xs-10">\
+     				<div class="friends__list__item--info">\
+     				<a href="#" class="friends__name" data-user-id="' + id + '">   <span class="friends__firstname">' + firstname + ' </span><span class="friends__lastname">' + lastname + ' </span></a>\
+     				<div class="friends__buttons"> \
+     				<button class="friends__unfollow"><i class="icon fa fa-user-times"></i>Unfollow</button> <button class="friends__block"><i class="icon fa fa-user-secret"></i>Block</button></div>\
+     				</div>\
+     				</div>\
+     				</div>\
+     				</div>\
+     				</li>');
+     		}
+
+
+     		// function yourFriends(id, lastname, firstname, quote, photo, lived, form, went, friend){
+
+     			// Render.friendsList();
+     		// }
+     		yourFriends(friends.id,friends.lastname,friends.firstname,friends.quote,friends.photo, friends.lived, friends.from, friends.went);
+
+
+        // проверяем есть ли фото, если нету или формат не соответствует, то подгружаем стандартное фото
+        if(typeof friends.photo == 'object'){
+        	$('.friends__logo>img').attr('src', '../img/no-image-user.jpg')
+        }
+        else if(typeof friends.photo == ''){
+        	$('friends__logo>img').attr('src', '../img/no-image-user.jpg')
+        }
+    };
+}
+/*если нет друзей, то показываем блок с информацией, что друзей  у нас нет*/
+else if(data.friends.length==0){
+	$('.friends__list__item.empty').css({
+		'display':'block'
+	});
+	$('.friends__list__item.empty').html('У вас еще нет друзей');
+};
+},
+error: function (xhr, status, error) {
+	console.log('ERROR!!!', xhr, status, error);
+}
+});
+},
+
+/*Добавление файлов*/
+UploadController:  function(token){
+	var form = new FormData();
+	form.append('UploadForm[imageFile]', ($('#profilePhoto')[0].files[0]));
+	form.append('UploadForm[imageFile]', ($('#NewPhoto')[0].files[0]));
 		// form.append('UploadForm[imageFile]', ($('#postAddPhoto')[0].files[0]));
 
 		$.ajax({
@@ -299,8 +393,9 @@ error: function (xhr, status, error) {
 			},
 			data: form,
 			success: function (data) {
-				console.log(data);
-				postAddPhoto = data.link
+				console.log(data.link);
+				postAddPhoto.push(data.link);
+				console.log(postAddPhoto);
 				console.log($('#postAddPhoto')[0].files[0]);
 			},
 			error: function (xhr, status, error) {
@@ -627,6 +722,7 @@ error: function(data){
     /*удаляем из поиска другие результаты поиска*/
     $('.search__result--found').children().remove();
     $('.posts').hide();
+    $('.chats').hide();
     /*если количество результатов поиска не 0, то убираем пустой элемент с текстом, что ничего не найдено*/
     if(data.profiles.length!==0){
     	$('.search__result--empty').css({
@@ -785,12 +881,75 @@ error:function (xhr, status, error) {
 			},
 			success: function (data) {
 				console.log(data);
-				App.AlbumController(token);
-			}, 
-			error:function (xhr, status, error) {
-				console.log('ERROR!!!', xhr, status, error);
-			}
-		});
+				console.log(data.albums.length);
+    // localStorage.setItem('albums_id', data.albums.id);
+    $('#albums').children().remove();
+
+    /*если количество альбомов не 0, то убираем пустой элемент с текстом, что ничего не найдено*/
+    if(data.albums.length!==0){
+    	$('.album-item-empty').css({
+    		'display':'none'
+    	});
+
+    	/*проходим массивом по результатам поиска*/
+    	for(var i=0;i<data.albums.length;i++){
+    		var albums = data.albums[i];
+    		albums_id=data.albums[i].id;
+    		/*функция по выводу информации про альбомы*/
+    		function AllAlbums(id, name, created, photos){
+    			$('#albums').append('<li class="albums__list__item" data-album-created="' + created + '" data-album-id="' + id + '">\
+    				<a href="#" class="albums__list__item--delete">x</a>\
+    				<div class="albums__list__item--info">\
+    				<a href="#" class="albums__name">  ' + name + ' </a>\
+    				</li>');
+    		}
+
+
+    		AllAlbums(albums.id,albums.name,albums.created,albums.photos);
+
+
+        // проверяем есть ли фото, если нету или формат не соответствует, то подгружаем стандартное фото
+        if(albums.photos.length!== 0){
+        	console.log(albums.photos.length);
+        	console.log(albums.photos[0].url);
+        	$('.albums__list__item').eq(i).css({
+        		'backgroundImage': 'url(' + albums.photos[0].url+ ')',
+        		'backgroundSize': 'cover',
+        		'background-repeat':'no-repeat'
+        	});
+
+        }
+
+        else if(albums.photos.length === 0){
+        	console.log(albums.photos.length);
+        	$('.albums__list__item').eq(i).css({
+        		'backgroundImage': 'url(../img/no-image.png)', 
+        		'backgroundSize': 'cover',
+        		'background-repeat':'no-repeat'
+        	});
+        }
+    };
+}
+
+
+
+/*если нет альбомов, то показываем блок с информацией, что альбомов  у нас нет*/
+else if(data.albums.length==0){
+	console.log('У вас еще нет альбомов');
+	var divEmptyAlbum = document.createElement('div');
+	$('#albums').append(divEmptyAlbum);
+	$(divEmptyAlbum).css({
+		'textAlign' : 'center',
+		'fontSize' : '20px'
+	});
+	$(divEmptyAlbum).text('У вас еще нет альбомов');
+};
+
+},  
+error:function (xhr, status, error) {
+	console.log('ERROR!!!', xhr, status, error);
+}
+});
 	},
 
 
@@ -963,32 +1122,34 @@ error:function (xhr, status, error) {
 
 //Добавление поста
 addPost: function addPost() {
-	// arr = [postAddPhoto];
-	
 
 	console.log(postAddPhoto);
+	/*создаем массив, в котором перебираем элементы из массива, в который загружаются фотографии*/
+	var media = [];
+
+	for (var i = 0; i < postAddPhoto.length; i++) {
+		media.push({
+			url: postAddPhoto[i]
+		});
+	}
+
 	$.ajax({
 		url: 'http://restapi.fintegro.com/posts',
 		method: 'POST',
 		dataType: 'json',
 		data: {
 			text: $('#massage').val(),
-			media: [{
-				url:postAddPhoto
-			},
-			{
-				url:postAddPhoto
-			},
-			{
-				url:postAddPhoto
-			}]
+			media: media
 		},
 		headers: {
 			bearer: token
 		},
 		success: function (data) {
 
-			App.showPosts();
+			// for(var i=0; i<postAddPhoto.length;i++){
+				App.showPosts();
+			// }
+
 			console.log(data);
 			// console.log(data.mediaList.url);
 		},
@@ -997,6 +1158,10 @@ addPost: function addPost() {
 		}
 
 	});
+
+	// }
+	
+
 },
 // addMedia: function addPost() {
 // 	$.ajax({
@@ -1146,7 +1311,7 @@ showPosts: function showPosts() {
 			console.log(data.posts);
 
 
-
+			$('.chats').hide();
 
 
 			// /*добавила*/
@@ -1187,58 +1352,66 @@ showPosts: function showPosts() {
 						comments += '<div class="row posts__comments" data-comment-id = "' + data.posts[i].comments[j].id + '">' +
 						'<div class="container-fluid"> ' +   
 						'<div class="row"> ' +   
-						'<div class="col-lg-3 col-md-3 col-sm-3 col-xs-4"> ' +   
+						'<div class="col-lg-2 col-md-2 col-sm-2 col-xs-4"> ' +   
 						'<img src="' + data.posts[i].comments[j].user.photo + '" alt="" class="postUserPhoto">' +
 						'</div> ' +   
-						'<div class="col-lg-9 col-md-9 col-sm-9 col-xs-8"> ' + 
+						'<div class="col-lg-10 col-md-10 col-sm-10 col-xs-8"> ' + 
 						'<div class="userCommentname"> ' +   
 						'<span class="userCommentLastname"> ' + data.posts[i].user.lastname + ' </span>' +
 						'<span class="userCommentFirstname"> ' + data.posts[i].user.firstname + ' </span>' + 
 						'<i class="remove-comment">x</i>' + 
 						' </div>' +
-						'<p>' + data.posts[i].comments[j].text +  
+						'<p class="textComment">' + data.posts[i].comments[j].text +  
 						'</p>' +
 						' </div>' +
 						' </div>' +
 						' </div>' +
 						'</div>';
 					}
-
+					photos = '';
+					for (var p = 0; p < data.posts[i].mediaList.length; p++) {
+						var emptyurl = data.posts[i].mediaList[p] == null ? '' : data.posts[i].mediaList[p].url;
+						photos+= '<img src="' + emptyurl +'">';
+					}
 					// for (var t = 0; t<data.posts[i].mediaList.length; t++){
+						var emptyurl = data.posts[i].mediaList[0] == null ? '' : data.posts[i].mediaList[0].url;
 						$('.posts .wall__empty-item').append(
 							'<div class="post-item card-panel" data-id="' + data.posts[i].id + '">' +
 							'<div class="post-content">' +
 							'<div class="container-fluid"> ' +   
 							'<div class="row"> ' +   
-							'<div class="col-lg-3 col-md-3 col-sm-3 col-xs-4"> ' + 
+							'<div class="col-lg-2 col-md-2 col-sm-2 col-xs-4"> ' + 
 							'<img src="' + data.posts[i].user.photo + '" alt="" class="postUserPhoto">' +
 							' </div>' +
-							'<div class="col-lg-9 col-md-9 col-sm-9 col-xs-8"> ' + 
-							'<div class="userPostname"> ' +   
+							'<div class="col-lg-10 col-md-10 col-sm-10 col-xs-8"> ' + 
+							'<div class="userPostname"> ' +  
+							'<a class="userPostname--link">' +
 							'<span class="userPostLastname"> ' + data.posts[i].user.lastname + ' </span>' +
 							'<span class="userPostFirstname"> ' + data.posts[i].user.firstname + ' </span>' + 
-							'<i class="remove-post">x</i>' + 
+							'</a>' +
+							'<span class="post-date">'+ data.posts[i].date +'</span>'+
+							// '<i class="remove-post">x</i>' + 
 							' </div>' +
-							'<p>' + data.posts[i].text + '</p>' +
-						// '<img src="" class="photomedia">' +
-						'<img src="' + data.posts[i].mediaList[0].url +'">' +
-						'</div>' +
-						'</div>' +
-						'</div>' +
-						'</div>' +
-						comments +
-						'<div class="row posts__input-comment">' +
-						'<input type="text" class="comments-field" placeholder="Enter your comment">' +
-						'<button class="btn add-comment center" type="submit" name="">' +
-						'<i class="fa fa-comment"> </i>' +
-						'</button>' +
-						'</div>' +
-						'<p class="right-align posts__buttons">' +
-						'<a href="comment-post">Сomment</a>' +
-						'<a href="remove-post">Remove</a>' +
-						'</p>' +
-						'</div>'
-						);
+							'<p class="textPost">' + data.posts[i].text + '</p>' +
+							photos+
+							// '<img src="' + emptyurl +'">' +
+							'</div>' +
+							'</div>' +
+							'</div>' +
+							'</div>' +
+							comments +
+							'<div class="row posts__input-comment">' +
+							'<input type="text" class="comments-field" placeholder="Enter your comment">' +
+							'<button class="btn add-comment center" type="submit" name="">' +
+							'<i class="fa fa-comment"> </i>' +
+							'</button>' +
+							'</div>' +
+							'<p class="right-align posts__buttons">' +
+							'<a href="comment-post">Сomment</a>' +
+							'<a href="remove-post">Remove</a>' +
+							'</p>' +
+							'</div>'
+							);
 					// }
 				}
 			}
@@ -1249,4 +1422,260 @@ showPosts: function showPosts() {
 	});
 }, 
 
+// чаты
+chats: function(token) {
+	$.ajax({
+		url: 'http://restapi.fintegro.com/chats',
+		method: 'GET',
+		dataType: 'json',
+		headers: {
+			bearer: token
+		},
+		success: function(data) {
+        // $('.chat').remove();
+        Func.createChatBlock(data);
+    },
+    error: function(data) {
+    	console.log(data);
+    }
+});
+},
+
+  // новое сообщение
+  newMessage: function(token, user_id, message) {
+  	$.ajax({
+  		url: 'http://restapi.fintegro.com/chats',
+  		method: 'POST',
+  		dataType: 'json',
+  		headers: {
+  			bearer: token
+  		},
+  		data: {
+  			user_id: user_id,
+  			message: message
+  		},
+  		success: function(data) {
+  			console.log('Новое сообщение: ', data.id);
+
+  			localStorage.setItem('chat-id', data.id);
+  		},
+  		error: function(data) {
+  			console.log(data);
+  		}
+  	});
+  },
+
+  // просмотр сообщений в чате
+  getChat: function(token, chat_id) {
+  	$.ajax({
+  		url: 'http://restapi.fintegro.com/chats/'+ chat_id +'',
+  		method: 'GET',
+  		dataType: 'json',
+  		headers: {
+  			bearer: token
+  		},
+  		success: function(data) {
+  			var chatUserId = data.chat.chat_users;
+
+        // Выводим имя и фамилию пользователя с которым общаемся
+        if (id == chatUserId[0].user_id) {
+        	$('.chat-persone').html(chatUserId[1].firstname + ' ' + chatUserId[1].lastname);
+        } else {
+        	$('.chat-persone').html(chatUserId[0].firstname + ' ' + chatUserId[0].lastname);
+        }
+
+        // Создаем блоки с сообщениями
+        Func.createMessageBlock(data);
+    },
+    error: function(data) {
+    	console.log(data);
+    }
+});
+  },
+
+  // отправить сообщение в чат
+  sendMessage: function(token, message, chat_id) {
+  	$.ajax({
+  		url: 'http://restapi.fintegro.com/chats/' + chat_id,
+  		method: 'PUT',
+  		dataType: 'json',
+  		headers: {
+  			bearer: token
+  		},
+  		data: {
+  			message: message
+  		},
+  		success: function(data) {
+  			console.log('Отправленное сообщение в чат: ', data);
+  		},
+  		error: function(data) {
+  			console.log(data);
+  		}
+  	});
+  },
+
+  deleteChat: function(token, chat_id) {
+  	$.ajax({
+  		url: 'http://restapi.fintegro.com/chats/'+ chat_id +'',
+  		method: 'DELETE',
+  		dataType: 'json',
+  		headers: {
+  			bearer: token
+  		},
+  		success: function(data) {
+  			console.log('Чат id="'+ chat_id +'" удалён');
+  		}
+  	});
+  },
+
+
+
+
+  /*news*/
+
+//Добавление новостного комментария
+addNewsComment: function addNewsComment(text, id) {
+	$.ajax({
+		url: 'http://restapi.fintegro.com/comments',
+		method: 'POST',
+		dataType: 'json',
+		data: {
+			text: text,
+			post_id: id
+		},
+		headers: {
+			bearer: token
+		},
+		success: function () {
+			App.showNews();
+		},
+		error: function (xhr, status, error) {
+			console.log('ERROR!!!', xhr, status, error);
+		}
+
+	});
+},
+
+
+//Удаление новостного коментария
+removeNewsComment: function removeNewsComment(id) {
+	console.log(id);
+	$.ajax({
+		url: 'http://restapi.fintegro.com/comments/' + id,
+		method: 'DELETE',
+		dataType: 'json',
+		headers: {
+			bearer: token
+		},
+		success: function () {
+			App.showNews();
+		},
+		error: function (xhr, status, error) {
+			console.log('ERROR!!!', xhr, status, error);
+		}
+
+	});
+},
+
+//Запрос на вывод новостей
+showNews: function () {
+	$.ajax({
+		url: 'http://restapi.fintegro.com/news',
+		method: 'GET',
+		dataType: 'json',
+		data: {
+			limit: 10,
+			page: 1
+		},
+		headers: {
+			bearer: token
+		},
+		success: function (data) {
+			console.log(data);
+			if (data.news.length == 0) {
+				$('.posts .wall__empty-item').html('<div class="teal lighten-5 card"><p class="center card-content posts__message">You do not have news yet</p></div>');
+			} else {
+				$('.posts').html('<div class="wall__empty-item card-content news"></div>');
+				var comments = '';
+				for (var i = 0; i < data.news.length; i++) {
+					if (data.news[i].post != null) {
+						for (var j = 0; j < data.news[i].post.length; j++) {
+							comments = '';
+							for (var l = 0; l < data.news[i].post[j].comments.length; l++) {
+								comments += '<div class="row posts__comments" data-comment-id = "' + data.news[i].post[j].comments[l].id + '">' +
+								'<div class="container-fluid"> ' +
+								'<div class="row"> ' +
+								'<div class="col-lg-3 col-md-3 col-sm-3 col-xs-4"> ' +
+								'<img src="' + data.news[i].post[j].comments[l].user.photo + '" alt="" class="postUserPhoto">' +
+								'</div> ' +
+								'<div class="col-lg-9 col-md-9 col-sm-9 col-xs-8"> ' +
+								'<div class="userCommentname"> ' +
+								'<span class="userCommentLastname"> ' + data.news[i].post[j].comments[l].user.lastname + ' </span>' +
+								'<span class="userCommentFirstname"> ' + data.news[i].post[j].comments[l].user.firstname + ' </span>' +
+								' </div>' +
+								'<p>' + data.news[i].post[j].comments[l].text +
+								'<i class="remove-comment">x</i>' + '</p>' +
+								' </div>' +
+								' </div>' +
+								' </div>' +
+								'</div>';
+							}
+
+							photos = '';
+							for (var p = 0; p < data.news[i].post[j].mediaList.length; p++) {
+								var emptyurl = data.news[i].post[j].mediaList[p] == null ? '' : data.news[i].post[j].mediaList[p].url;
+								photos+= '<img src="' + emptyurl +'">';
+							}
+
+							var emptyurl = data.news[i].post[j].mediaList[0] == null ? '' : data.news[i].post[j].mediaList[0].url;
+
+							$('.posts .wall__empty-item').append(
+								'<div class="post-item card-panel news" data-id="' + data.news[i].post[j].id + '">' +
+								'<div class="post-content">' +
+								'<div class="container-fluid"> ' +   
+								'<div class="row"> ' +   
+								'<div class="col-lg-2 col-md-2 col-sm-2 col-xs-4"> ' + 
+								'<img src="' + data.news[i].post[j].user.photo + '" alt="" class="postUserPhoto">' +
+								' </div>' +
+								'<div class="col-lg-10 col-md-10 col-sm-10 col-xs-8"> ' + 
+								'<div class="userPostname"> ' +  
+								'<a class="userPostname--link">' +
+								'<span class="userPostLastname"> ' + data.news[i].post[j].user.lastname + ' </span>' +
+								'<span class="userPostFirstname"> ' + data.news[i].post[j].user.firstname + ' </span>' + 
+								'</a>' +
+								'<span class="post-date">'+ data.news[i].post[j].date +'</span>'+
+							// '<i class="remove-post">x</i>' + 
+							' </div>' +
+							'<p class="textPost">' + data.news[i].post[j].text + '</p>' +
+							photos+
+							// '<img src="' + emptyurl +'">' +
+							'</div>' +
+							'</div>' +
+							'</div>' +
+							'</div>' +
+							comments +
+							'<div class="row posts__input-comment">' +
+							'<input type="text" class="comments-field" placeholder="Enter your comment">' +
+							'<button class="btn add-news-comment center" type="submit" name="">' +
+							'<i class="fa fa-comment"> </i>' +
+							'</button>' +
+							'</div>' +
+							'<p class="right-align posts__buttons">' +
+							'<a href="comment-post">Сomment</a>' +
+							'<a href="remove-news-post">Remove</a>' +
+							'</p>' +
+							'</div>'
+							);
+						}
+					}
+
+				}
+			}
+		},
+		error: function (xhr, status, error) {
+			console.log('ERROR!!!', xhr, status, error);
+		}
+
+	});
+},
 };
