@@ -70,8 +70,9 @@ var Render = {
 
   createProfile: function(tab){
     this.createRoute('views/pages/createProfile.hbs', App.section, null, tab);
+    var activeTab = sessionStorage.getItem('activeTab')?sessionStorage.getItem('activeTab'):"[data-tab='profile']";
     setTimeout(function(){
-      $('[data-tab="profile"]').trigger('click');
+      $(activeTab).trigger('click');
     }, 100);
   },
 
