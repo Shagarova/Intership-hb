@@ -462,6 +462,7 @@ $('body').on('click', '.nav-link', function(e){
   if(tab=='albums'){
     $('.modal').remove();
     $('.new').remove();
+    $('.nav-link__new-album').css('display', 'inline-block');
     sessionStorage.setItem('tabName', tab);
     sessionStorage.setItem('activeTab', activeTab);
     $(".breadcrumbs").append("<span class='new'> > </span><a href='#' class='new breadcrumbs-album'>Albums</a>");
@@ -507,7 +508,6 @@ $('body').on('click', '.nav-link', function(e){
           'height' : '400px'
         });
         $('.user__information').fadeIn();
-        $('.nav-link__new-album').css('display', 'inline-block');
         $('.nav-link__photos').css('display', 'none');
         $('.nav-link__new-photo').css('display', 'none');
         $('.nav-link__remove-album').css('display', 'none');
