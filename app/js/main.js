@@ -36,9 +36,14 @@ var App = {
 				success: function(data) {
 					console.log('tata');
 					console.log(data);
-					Render.profilePage(data);
+					if (sessionStorage.getItem('activeTab')) {
+						Render.createProfile(sessionStorage.getItem('activeTab'));
+					} else {
+						Render.profilePage(data);
+					};
 					Render.navUser();
 					App.ProfilesControllerGet(token);
+					
 				}
 			});
 		} else {
@@ -344,6 +349,20 @@ error: function (xhr, status, error) {
 }
 });
 },
+
+ /* Когда пользователь обновляет страницу, чтобы оставаться на той же вкладке (табе), на которой он остановился*/ 
+/*  initCreateProfilePage: function () {
+	var tokenTabName = sessionStorage.getItem('tabName');
+	if (!Func.cookies()) {
+	  Render.loginPage();
+	}
+	else if (tokenTabName){
+		Render.createProfile(sessionStorage.getItem('activeTab')? sessionStorage.getItem('activeTab'): undefined);
+	}
+	else {
+	  $('[data-tab="profile"]').trigger('click');
+	}
+  }, */
 
 /*Добавление файлов*/
 UploadController:  function(token){

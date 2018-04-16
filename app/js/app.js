@@ -40,7 +40,6 @@ $('body').on('click', '#buttonReestablish', function() {
 $('body').on('click', '.header__menu--item.profile', function(e) {
   e.preventDefault();
   Render.createProfile();
-  App.ProfilesControllerGet();
 });
 
 
@@ -441,9 +440,19 @@ $('body').on('click', '.nav-link', function(e){
     },500);
     sessionStorage.setItem('tabName', tab);
     sessionStorage.setItem('activeTab', activeTab);
+    $('a').removeClass('active');
+    $('label').removeClass('active');
+    $(this).addClass('active');
+  }
+
+  if(tab=='new-album'){
+    $('a').removeClass('active');
+    $('label').removeClass('active');
+    $(this).addClass('active');
   }
 
   if(tab=='profile'){
+    $('.nav-link__new-album').fadeOut();
     $('.new').remove();
     $(".breadcrumbs").append("<span class='new'> > </span><a href='#' class='new'>Profile</a>");
     sessionStorage.setItem('tabName', tab);
@@ -743,35 +752,10 @@ $('body').on('click', '.addMessage', function() {
     App.getChat(token, chatId);
   }, 500);
   });
-
-
- /* Когда пользователь обновляет страницу, чтобы оставаться на той же вкладке (табе), на которой он остановился*/ 
-    function initCreateProfilePage() {
-      var tokenTabName = sessionStorage.getItem('tabName');
-      if (tokenTabName){
-          Render.createProfile(sessionStorage.getItem('activeTab')? sessionStorage.getItem('activeTab'): undefined);
-      }
-      else {
-        $('[data-tab="profile"]').trigger('click');
-      }
-
-      
-      /* var activeNewAlbum = $('[data-tab="new-album"]')
-      if (tokenTabName=='new-album') {
-        $(activeNewAlbum).addClass('active');
-
-
-      $('.active').siblings().css({
-        'fontWeight' : 'normal',
-        'fontSize' : '16px'
-      })
-      } */
-
-    };
     
-    $(function(){
-      initCreateProfilePage();
-    }); 
+    // $(function(){
+    //   App.initCreateProfilePage();
+    // }); 
 
     /*окончание функции*/
 

@@ -70,6 +70,9 @@ var Render = {
 
   createProfile: function(tab){
     this.createRoute('views/pages/createProfile.hbs', App.section, null, tab);
+    setTimeout(function(){
+      $('[data-tab="profile"]').trigger('click');
+    }, 100);
   },
 
 
