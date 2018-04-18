@@ -199,6 +199,8 @@ $('body').on('click', '.nav-link__albums', function(e){
 
 /*создаем новый альбом*/
 $('body').on('click', '.nav-link__new-album', 
+
+
 /*функция по созданию нового альбома из модального окна*/
 function createAlbumModal(){
   $('body').append('<div class="modal">\
@@ -207,6 +209,9 @@ function createAlbumModal(){
     <button class="modal-edit" style="background-color: blue; color: rgb(255, 255, 255);">Create</button>\
     </div>\
     </div>');
+    $('[data-content]').fadeOut();
+    var tabalbums = $('.nav-link__albums').data('tab');
+    $('[data-content =  ' + tabalbums + ']').fadeIn();
 });
 
 
@@ -270,10 +275,10 @@ return false;
     /*нажимаем на вкладку - создание нового альбома*/
     $('body').on('click', '.nav-link__new-album', function(){
       console.log('qq');
-      var tabalbums = $('.nav-link__albums').data('tab');
       $('.new').remove();
       $(".breadcrumbs").append("<span class='new'> > </span><a href='#' class='new breadcrumbs-album' >Albums</a><span class='new'> > </span><a href='#' class='new breadcrumbs-newAlbum'>New album</a>");
       $('.nav-link__new-album').css('display', 'inline-block');
+      var tabalbums = $('.nav-link__albums').data('tab');
       $('[data-content =  ' + tabalbums + ']').fadeIn();
     });
     /**/
@@ -448,7 +453,7 @@ $('body').on('click', '.nav-link', function(e){
   if(tab=='new-album'){
     $('a').removeClass('active');
     $('label').removeClass('active');
-    $(this).addClass('active');
+    $(this).addClass('active');    
   }
 
   if(tab=='profile'){
@@ -493,11 +498,6 @@ $('body').on('click', '.nav-link', function(e){
     };
 
   };
-
-
-    if($(this).data('tab') !== 'albums' && $(this).data('tab') !== 'new-album'){
-      $('.nav-link__new-album').css('display', 'none')
-    };
 
 
     if((tab=='profile')||(tab=='albums')||(tab=='remove-album')){
