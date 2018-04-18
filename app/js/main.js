@@ -38,20 +38,7 @@ var App = {
 					console.log(data);
 					if (sessionStorage.getItem('activeTab')) {
 						Render.createProfile(sessionStorage.getItem('activeTab'));
-							// if (sessionStorage.getItem('activeTab')=='.nav-link__new-album'){
-							// // console.log($('[data-content="profile"]'), $('[data-content="albums"]'));
-							// // 	$('[data-content="profile"]').fadeOut(
-							// // 	1000, function(){
-							// // 		console.log('fadeOut');
-							// // 	}
-							// // );
-							// $('[data-content="albums"]').fadeIn(
-							// 	function(){
-							// 		console.log('fadeIn');
-							// 	}
-							// );
-							// }	
-					} else {
+						} else {
 						Render.profilePage(data);
 					};
 					Render.navUser();
@@ -61,7 +48,6 @@ var App = {
 			});
 		} else {
 			Render.loginPage();
-			// Render.navGuest();
 		}
 	},
 
