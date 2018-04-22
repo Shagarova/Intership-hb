@@ -91,5 +91,9 @@ var Render = {
         $(tab).trigger('click');
       }
     });
-  }
+  },
+
+  messagePage: function () {
+    this.createRoute('views/pages/messagePage.hbs', App.section);
+  },
 };

@@ -1450,8 +1450,9 @@ chats: function(token) {
 			bearer: token
 		},
 		success: function(data) {
+			console.log(data);
         // $('.chat').remove();
-        Func.createChatBlock(data);
+        // Func.createChatBlock(data);
     },
     error: function(data) {
     	console.log(data);

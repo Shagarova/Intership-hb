@@ -146,3 +146,52 @@ input{
 		margin:auto 40%;
 	}
 
+	.breadcrumbs {
+		padding: 15px 75px;
+	}
+
+
+	/* MESSAGES PAGE*/
+	.chat_messages div {
+		display: inline-block;
+	}
+
+	.chat_friends-list {
+		width: 25%;
+		border-right: 1px solid #cdcdcd;
+	}
+
+	.chat_container {
+		width: 60%;
+		padding-left: 30px;
+	}
+
+	.chat_container input {
+		width: 100%;
+		vertical-align: bottom;
+		margin-bottom: 0;
+	}
+
+	.chat_friend {
+		padding-right: 15px;
+	}
+
+	.chat_friend li.active {
+		background: #d7f1f3;
+	}
+
+	.chat_friends-list {
+		vertical-align: top;
+		height: 100%;
+	}
+
+	.chat_friends-list .chat_friend-name {
+		display: inline-block;
+		text-align: right;
+		width: 100%;
+	}
+
+	.chat_user, .chat_user-message {
+		text-align: right;
+	}
+

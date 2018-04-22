@@ -768,6 +768,15 @@ $('body').on('click', '.friends__name', function() {
       App.AlbumControllerID(token,albumID);
     });
 
+// страница сообщений
+
+$('body').on('click', '.header__menu--item.message', '.breadcrumbs-message', function() {
+  $('.new').remove();
+  $(".breadcrumbs").append("<span class='new'> > </span><a href='#' class='new breadcrumbs-message' >Messages</a>");
+  Render.messagePage();
+  App.chats(token);
+  console.log(token);
+});
 
 
 
