@@ -15,10 +15,7 @@ var Render = {
     this.createRoute('views/pages/profileLeftAlbums.hbs', App.sectionLeftAlbums, context);
     this.createRoute('views/pages/profileCenter.hbs', App.sectionCenter, context);
     this.createRoute('views/pages/profileRightFriends.hbs', App.sectionRightFriends, context);
-    this.createRoute('views/pages/profileRightSponsored.hbs', App.sectionRightSponsored, context);
-
-    // this.createRoute('views/pages/footer.hbs', App.footer, context);
-    
+    this.createRoute('views/pages/profileRightSponsored.hbs', App.sectionRightSponsored, context);   
   },
 
   registerPage: function () {
