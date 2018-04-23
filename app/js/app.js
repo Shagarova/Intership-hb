@@ -774,7 +774,7 @@ $('body').on('click', '.header__menu--item.message', '.breadcrumbs-message', fun
   $('.new').remove();
   $(".breadcrumbs").append("<span class='new'> > </span><a href='#' class='new breadcrumbs-message' >Messages</a>");
   Render.messagePage();
-  App.chats(token);
+  App.friends(token);
   console.log(token);
 });
 

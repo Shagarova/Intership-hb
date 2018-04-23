@@ -161,6 +161,14 @@ input{
 		border-right: 1px solid #cdcdcd;
 	}
 
+	.chat_friends-list.content__right {
+		margin-top: 0;
+	}
+
+	.chat_friends-list.content__right .friends__caption {
+		padding-top: 0;
+	}
+
 	.chat_container {
 		width: 60%;
 		padding-left: 30px;

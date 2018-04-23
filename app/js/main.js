@@ -181,57 +181,58 @@ ProfilesControllerGet: function(){
 
 
      /*если количество друзей не 0, то убираем пустой элемент с текстом, что ничего не найдено*/
-     if(data.friends_count!==0){
-     	$('.friends__list__item.empty').css({
-     		'display':'none'
-     	});
+//      if(data.friends_count!==0){
+//      	$('.friends__list__item.empty').css({
+//      		'display':'none'
+//      	});
 
-     	/*проходим массивом по результатам поиска*/
-     	for (var i=0; i<data.friends.length; i++) {
-     		var friends = data.friends[i];
+//      	/*проходим массивом по результатам поиска*/
+//      	for (var i=0; i<data.friends.length; i++) {
+//      		var friends = data.friends[i];
 
-     		/*функция по выводу информации про друзей справа сверху*/
-     		function yourFriends(id, lastname, firstname, quote, photo, lived, form, went, friend){
-     			$('.friends__list').append('<li class="friends__list__item followers" data-user-id="' + id + '">\
-     				<div class="container-fluid">\
-     				<div class="row">\
-     				<div class="friends__logo col-lg-3 col-md-3 col-sm-2 col-xs-2"> <img src=" ' + photo + ' "></div>\
-     				<div class="col-lg-9 col-md-9 col-sm-10 col-xs-10">\
-     				<div class="friends__list__item--info">\
-     				<a href="#" class="friends__name" data-user-id="' + id + '">   <span class="friends__firstname">' + firstname + ' </span><span class="friends__lastname">' + lastname + ' </span></a>\
-     				<div class="friends__buttons"> \
-     				<button class="friends__unfollow"><i class="icon fa fa-user-times"></i>Unfollow</button> <button class="friends__block"><i class="icon fa fa-user-secret"></i>Block</button></div>\
-     				</div>\
-     				</div>\
-     				</div>\
-     				</div>\
-     				</li>');
-     		}
-
-
-     		// function yourFriends(id, lastname, firstname, quote, photo, lived, form, went, friend){
-
-     			// Render.friendsList();
-     		// }
-     		yourFriends(friends.id,friends.lastname,friends.firstname,friends.quote,friends.photo, friends.lived, friends.from, friends.went);
+//      		/*функция по выводу информации про друзей справа сверху*/
+//      		function yourFriends(id, lastname, firstname, quote, photo, lived, form, went, friend){
+//      			$('.friends__list').append('<li class="friends__list__item followers" data-user-id="' + id + '">\
+//      				<div class="container-fluid">\
+//      				<div class="row">\
+//      				<div class="friends__logo col-lg-3 col-md-3 col-sm-2 col-xs-2"> <img src=" ' + photo + ' "></div>\
+//      				<div class="col-lg-9 col-md-9 col-sm-10 col-xs-10">\
+//      				<div class="friends__list__item--info">\
+//      				<a href="#" class="friends__name" data-user-id="' + id + '">   <span class="friends__firstname">' + firstname + ' </span><span class="friends__lastname">' + lastname + ' </span></a>\
+//      				<div class="friends__buttons"> \
+//      				<button class="friends__unfollow"><i class="icon fa fa-user-times"></i>Unfollow</button> <button class="friends__block"><i class="icon fa fa-user-secret"></i>Block</button></div>\
+//      				</div>\
+//      				</div>\
+//      				</div>\
+//      				</div>\
+//      				</li>');
+//      		}
 
 
-        // проверяем есть ли фото, если нету или формат не соответствует, то подгружаем стандартное фото
-        if(typeof friends.photo == 'object'){
-        	$('.friends__logo>img').attr('src', '../img/no-image-user.jpg')
-        }
-        else if(typeof friends.photo == ''){
-        	$('friends__logo>img').attr('src', '../img/no-image-user.jpg')
-        }
-    };
-}
-/*если нет друзей, то показываем блок с информацией, что друзей  у нас нет*/
-else if(data.friends.length==0){
-	$('.friends__list__item.empty').css({
-		'display':'block'
-	});
-	$('.friends__list__item.empty').html('У вас еще нет друзей');
-};
+//      		// function yourFriends(id, lastname, firstname, quote, photo, lived, form, went, friend){
+
+//      			// Render.friendsList();
+//      		// }
+//      		yourFriends(friends.id,friends.lastname,friends.firstname,friends.quote,friends.photo, friends.lived, friends.from, friends.went);
+
+
+//         // проверяем есть ли фото, если нету или формат не соответствует, то подгружаем стандартное фото
+//         if(typeof friends.photo == 'object'){
+//         	$('.friends__logo>img').attr('src', '../img/no-image-user.jpg')
+//         }
+//         else if(typeof friends.photo == ''){
+//         	$('friends__logo>img').attr('src', '../img/no-image-user.jpg')
+//         }
+//     };
+// }
+// /*если нет друзей, то показываем блок с информацией, что друзей  у нас нет*/
+// else if(data.friends.length==0){
+// 	$('.friends__list__item.empty').css({
+// 		'display':'block'
+// 	});
+// 	$('.friends__list__item.empty').html('У вас еще нет друзей');
+// };
+	Func.yourFriendsList(data);
 },
 error: function (xhr, status, error) {
 	console.log('ERROR!!!', xhr, status, error);
@@ -240,6 +241,25 @@ error: function (xhr, status, error) {
 
 },
 
+// список друзей
+friends: function(token) {
+	$.ajax({
+		url: 'http://restapi.fintegro.com/social-activities',
+		method: 'GET',
+		dataType: 'json',
+		headers: {
+			bearer: token
+		},
+		success: function(data) {
+			console.log(data);
+      data.friends_count = data.friends.length;
+      Func.yourFriendsList(data);
+    },
+    error: function(data) {
+    	console.log(data);
+    }
+  });
+},
 
 
 
