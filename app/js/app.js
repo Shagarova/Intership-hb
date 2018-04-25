@@ -391,6 +391,7 @@ $('body').on('click', '.header__menu--item', function(e){
 
   sessionStorage.removeItem('tabName');
   sessionStorage.removeItem('activeTab'); 
+  sessionStorage.removeItem('activeMenuTab');
 
   if ($(this).hasClass('profile')){
     console.log($(this));
@@ -404,6 +405,7 @@ $('body').on('click', '.breadcrumbs-main', function(e){
 
   sessionStorage.removeItem('tabName');
   sessionStorage.removeItem('activeTab'); 
+  sessionStorage.removeItem('activeMenuTab');
  
 });
 
@@ -638,11 +640,11 @@ $('body').on('change', '#postAddPhoto', function(token){
 
 /*чаты*/
 
-$('body').on('click', '.message', function() {
-  $('.chats').show();
-  $('.posts').hide();
-  $('.search').hide();
-});
+// $('body').on('click', '.message', function() {
+//   $('.chats').show();
+//   $('.posts').hide();
+//   $('.search').hide();
+// });
 
 // открыть чат
 $('body').on('click', '.chat', function() {
@@ -695,14 +697,6 @@ $('body').on('click', '.search__allFriends--startChat', function() {
         $('.modal-overlay').remove();
         Func.addModal();
       });
-
-$('body').on('click', '.header__menu--item.profile>.header__menu--link', function (e) {
-
-  e.preventDefault();
-  $('.new').remove();
-  $(".breadcrumbs").append("<span class='new'> > </span><a href='#' class='new breadcrumbs-profile'>Profile</a>");
-
-});
 
 // кнопка Start chat в списке врагов
 $('body').on('click', '.search__allEnemies--startChat', function() {
@@ -759,9 +753,18 @@ $('body').on('click', '.addMessage', function() {
 
     /*окончание функции*/
 
+    $('body').on('click', '.header__menu--item.profile>.header__menu--link', function (e) {
+
+      e.preventDefault();
+      $('.new').remove();
+      $(".breadcrumbs").append("<span class='new'> > </span><a href='#' class='new breadcrumbs-profile'>Profile</a>");
+    
+    });
+
 // нажимаем на имя друга в списке друзей
 $('body').on('click', '.friends__name', function() {
       var friendId = $(this).data('user-id');
+      var albumID = $(this).data('album-id');
       // localStorage.setItem('friendUserId', friendId);
       App.ProfileControllerGet(token, friendId);
 
@@ -771,11 +774,16 @@ $('body').on('click', '.friends__name', function() {
 // страница сообщений
 
 $('body').on('click', '.header__menu--item.message', '.breadcrumbs-message', function() {
+  var activeMenuTab = '.' + this.classList[1];
+  sessionStorage.setItem('activeMenuTab', activeMenuTab);
   $('.new').remove();
-  $(".breadcrumbs").append("<span class='new'> > </span><a href='#' class='new breadcrumbs-message' >Messages</a>");
   Render.messagePage();
+  setTimeout(function(){
+    $('.chats').show();
+  })
+  $(".breadcrumbs").append("<span class='new'> > </span><a href='#' class='new breadcrumbs-message' >Messages</a>");
   App.friends(token);
-  console.log(token);
+  App.getChat(token, chatId);
 });
 
 

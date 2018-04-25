@@ -36,6 +36,10 @@ var App = {
 				success: function(data) {
 					console.log('tata');
 					console.log(data);
+					if (sessionStorage.getItem('activeMenuTab')) {
+						Render.messagePage();
+						$(".breadcrumbs").append("<span class='new'> > </span><a href='#' class='new breadcrumbs-message' >Messages</a>");
+						}
 					if (sessionStorage.getItem('activeTab')) {
 						Render.createProfile(sessionStorage.getItem('activeTab'));
 						} else {
@@ -368,20 +372,6 @@ error: function (xhr, status, error) {
 }
 });
 },
-
- /* Когда пользователь обновляет страницу, чтобы оставаться на той же вкладке (табе), на которой он остановился*/ 
-/*  initCreateProfilePage: function () {
-	var tokenTabName = sessionStorage.getItem('tabName');
-	if (!Func.cookies()) {
-	  Render.loginPage();
-	}
-	else if (tokenTabName){
-		Render.createProfile(sessionStorage.getItem('activeTab')? sessionStorage.getItem('activeTab'): undefined);
-	}
-	else {
-	  $('[data-tab="profile"]').trigger('click');
-	}
-  }, */
 
 /*Добавление файлов*/
 UploadController:  function(token){
@@ -760,7 +750,7 @@ error: function(data){
     /*удаляем из поиска другие результаты поиска*/
     $('.search__result--found').children().remove();
     $('.posts').hide();
-    $('.chats').hide();
+    // $('.chats').hide();
     /*если количество результатов поиска не 0, то убираем пустой элемент с текстом, что ничего не найдено*/
     if(data.profiles.length!==0){
     	$('.search__result--empty').css({
@@ -1349,7 +1339,7 @@ showPosts: function showPosts() {
 			console.log(data.posts);
 
 
-			$('.chats').hide();
+			// $('.chats').hide();
 
 
 			// /*добавила*/

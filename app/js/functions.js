@@ -243,7 +243,7 @@ var Func = {
 		messages = data.chat.messages,
 		messageLength = messages.length;
 
-  // цыкл вывода сообщений в чате
+  // цикл вывода сообщений в чате
   for (var i = 0; i < messageLength; i++) {
   	var user,
   	message = data.chat.messages[i],
