@@ -652,7 +652,6 @@ $('body').on('click', '.chat', function() {
   $('.valeuMessage').val(''); // очищаем input от сообщений
   $('.open-chat').slideUp(300);
   $('.open-chat').slideDown(300);
-  Func.createMessageBlock();
     // $('.chats-list').slideUp(300, function() {
   //   $('.chat').remove();
   //   $('.chats-list').hide();
@@ -660,7 +659,7 @@ $('body').on('click', '.chat', function() {
   // });
 
   // localStorage.setItem('chat-id', chat_id);
-  // App.getChat(token, chat_id);
+  App.getChat(token, chat_id);
 });
 
 // закрыть чат и вернутся на список чатов

@@ -256,13 +256,17 @@ var Func = {
     	user = user2;
 	}
 
-    $('.open-chat').prepend('\
-    	<div class="chat-message" data-message-id="'+ message.chat_id +'">\
-    	<div class="chat-date">'+ message.date +'</div>\
-    	<div class="user-image"><img src="'+ user.photo +'" alt=""></div>\
-    	<div class="user-name">'+ user.firstname +' '+ user.lastname +'</div>\
-    	<div class="text-message">'+ message.message +'</div>\
-    	</div>');
+	$('.chat-inner-wrapper').remove();
+
+	$('.open-chat').prepend('\
+	<div class="chat-inner-wrapper">\
+		<div class="chat-message" data-message-id="'+ message.chat_id +'">\
+		<div class="chat-date">'+ message.date +'</div>\
+		<div class="user-image"><img src="'+ user.photo +'" alt=""></div>\
+		<div class="user-name">'+ user.firstname +' '+ user.lastname +'</div>\
+		<div class="text-message">'+ message.message +'</div>\
+		</div>\
+	</div>');
 }
 },
 
