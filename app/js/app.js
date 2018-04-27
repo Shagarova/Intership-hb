@@ -650,15 +650,17 @@ $('body').on('change', '#postAddPhoto', function(token){
 $('body').on('click', '.chat', function() {
   var chat_id = $(this).data('chat-id');
   $('.valeuMessage').val(''); // очищаем input от сообщений
+  $('.open-chat').slideUp(300);
+  $('.open-chat').slideDown(300);
+  Func.createMessageBlock();
+    // $('.chats-list').slideUp(300, function() {
+  //   $('.chat').remove();
+  //   $('.chats-list').hide();
+  //   $('.open-chat').slideDown(300);
+  // });
 
-  $('.chats-list').slideUp(300, function() {
-    $('.chat').remove();
-    $('.chats-list').hide();
-    $('.open-chat').slideDown(300);
-  });
-
-  localStorage.setItem('chat-id', chat_id);
-  App.getChat(token, chat_id);
+  // localStorage.setItem('chat-id', chat_id);
+  // App.getChat(token, chat_id);
 });
 
 // закрыть чат и вернутся на список чатов
@@ -696,7 +698,7 @@ $('body').on('click', '.search__allFriends--startChat', function() {
         $('.modalFriends').remove();
         $('.modal-overlay').remove();
         Func.addModal();
-      });
+});
 
 // кнопка Start chat в списке врагов
 $('body').on('click', '.search__allEnemies--startChat', function() {
@@ -717,7 +719,7 @@ $('body').on('click', '.close', function() {
 
 // Создать чат с сообщением
 $('body').on('click', '.btn-primary', function() {
-    var newMessage = $('.newMessage').val();
+    var newMessage = $('.chat_enter-message').val();
     var userId = localStorage.getItem('chatUserId');
 
 
@@ -747,11 +749,13 @@ $('body').on('click', '.addMessage', function() {
   }, 500);
   });
     
-    // $(function(){
-    //   App.initCreateProfilePage();
-    // }); 
-
-    /*окончание функции*/
+  // при нажатии на конкретный чат в списке чатов на странице message
+  $('body').on('click', '.friends__list__item', function() {
+    var userId = $(this).data('user-id');
+    localStorage.removeItem('chatUserId');
+    localStorage.setItem('chatUserId', userId);
+    App.getChat(token, chatId);
+  });
 
     $('body').on('click', '.header__menu--item.profile>.header__menu--link', function (e) {
 
@@ -776,14 +780,16 @@ $('body').on('click', '.friends__name', function() {
 $('body').on('click', '.header__menu--item.message', '.breadcrumbs-message', function() {
   var activeMenuTab = '.' + this.classList[1];
   sessionStorage.setItem('activeMenuTab', activeMenuTab);
+  var chatId = localStorage.getItem('chat-id');
   $('.new').remove();
   Render.messagePage();
   setTimeout(function(){
     $('.chats').show();
   })
   $(".breadcrumbs").append("<span class='new'> > </span><a href='#' class='new breadcrumbs-message' >Messages</a>");
-  App.friends(token);
-  App.getChat(token, chatId);
+  // App.friends(token);
+  // App.getChat(token, chatId);
+  App.chats(token);
 });
 
 

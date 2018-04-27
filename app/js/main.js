@@ -46,8 +46,8 @@ var App = {
 						Render.profilePage(data);
 					};
 					Render.navUser();
+					// Func.createChatBlock(data);
 					App.ProfilesControllerGet(token);
-					
 				}
 			});
 		} else {
@@ -535,7 +535,7 @@ error: function (xhr, status, error) {
     for (var i=0; i<data.friends.length; i++) {
     	var friends = data.friends[i];
     	/*функция по выводу информации про друзей*/
-    	function allYourFriends(id,lastname,firstname,quote,photo, lived, form, went, friend){
+    	function allYourFriends(id, lastname, firstname, quote, photo, lived, form, went, friend){
 
     		$('.search__result--found--Friends').append('<div class="search__allFriends" data-user-id="' + id + '">\
     			<div class="search__allFriends--info">\
@@ -1461,8 +1461,8 @@ chats: function(token) {
 		},
 		success: function(data) {
 			console.log(data);
-        // $('.chat').remove();
-        // Func.createChatBlock(data);
+        	$('.chat').remove();
+        	Func.createChatBlock(data);
     },
     error: function(data) {
     	console.log(data);
@@ -1504,7 +1504,8 @@ chats: function(token) {
   			bearer: token
   		},
   		success: function(data) {
-  			var chatUserId = data.chat.chat_users;
+			  var chatUserId = data.chat.chat_users;
+			  console.log(data.chat.chat_users);
 
         // Выводим имя и фамилию пользователя с которым общаемся
         if (id == chatUserId[0].user_id) {

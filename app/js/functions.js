@@ -254,9 +254,9 @@ var Func = {
     	user = user1;
     } else if (messageUserId == user2.user_id) {
     	user = user2;
-    }
+	}
 
-    $('.open-chat').append('\
+    $('.open-chat').prepend('\
     	<div class="chat-message" data-message-id="'+ message.chat_id +'">\
     	<div class="chat-date">'+ message.date +'</div>\
     	<div class="user-image"><img src="'+ user.photo +'" alt=""></div>\
@@ -282,7 +282,7 @@ addModal: function addModal() {
 		<div class="container">\
 		<div class="row">\
 		<div class="input-group">\
-		<input class="newMessage col-xs-12 col-md-12 col-lg-12" type="text" placeholder="Enter your message">\
+		<input class="chat_enter-message col-xs-12 col-md-12 col-lg-12" type="text" placeholder="Enter your message">\
 		<button type="button" class="btn btn-primary col-xs-12 col-md-12 col-lg-12">Send</button>\
 		</div>\
 		</div>\
@@ -298,14 +298,20 @@ addModal: function addModal() {
 createChatBlock: function createChatBlock(data) {
 	for (var i = data.chats.length - 1; i >= 0; i--) {
 		var chat = data.chats[i];
+		
+		$('.friends__list__item.empty').remove();
 
-		$('.chats-list').append('<div class="chat" data-chat-id="'+ chat.chat_id +'">\
-			<div class="chat-date">'+ chat.last_mes.date +'</div>\
-			<div class="user-image"><img src="'+ chat.chat_users[0].photo +'" alt=""></div>\
-			<div class="user-name">'+ chat.chat_users[0].firstname +' '+ chat.chat_users[0].lastname +'</div>\
-			<div class="text-message">'+ chat.last_mes.message +'</div>\
-			<div class="delete-chat">delete chat</div>\
-			</div>');
+		// $('.chats-list').append('<div class="chat" data-chat-id="'+ chat.chat_id +'">\
+		// 		<div class="chat-date">'+ chat.last_mes.date +'</div>\
+		// 		<div class="user-image"><img src="'+ chat.chat_users[0].photo +'" alt=""></div>\
+		// 		<div class="user-name">'+ chat.chat_users[0].firstname +' '+ chat.chat_users[0].lastname +'</div>\
+		// 		<div class="text-message">'+ chat.last_mes.message +'</div>\
+		// 		<div class="delete-chat">delete chat</div>\
+		// 	</div>');
+		$('.chats-list').append('<li class="chat" data-chat-id="'+ chat.chat_id +'">\
+		<a href="#" class="user-name">'+ chat.chat_users[1].firstname +' '+ chat.chat_users[1].lastname +'</div>\
+		</li>');
+
 	}
 }
 

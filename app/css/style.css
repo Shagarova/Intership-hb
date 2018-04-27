@@ -169,6 +169,10 @@ input{
 		margin-top: 0;
 	}
 
+	.chats-list .chat {
+		line-height: 30px;
+	}
+
 	.chat_friends-list.content__right .friends__caption {
 		padding-top: 0;
 	}
