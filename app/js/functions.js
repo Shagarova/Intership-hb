@@ -263,7 +263,7 @@ var Func = {
 		<div class="chat-message" data-message-id="'+ message.chat_id +'">\
 		<div class="chat-date">'+ message.date +'</div>\
 		<div class="user-image"><img src="'+ user.photo +'" alt=""></div>\
-		<div class="user-name">'+ user.firstname +' '+ user.lastname +'</div>\
+		<div class="user-name">'+ user.firstname +' '+ user.lastname +'</div></br>\
 		<div class="text-message">'+ message.message +'</div>\
 		</div>\
 	</div>');

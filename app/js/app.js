@@ -721,7 +721,6 @@ $('body').on('click', '.btn-primary', function() {
     var newMessage = $('.chat_enter-message').val();
     var userId = localStorage.getItem('chatUserId');
 
-
   // создаем новое сообщение
   App.newMessage(token, userId, newMessage);
   localStorage.removeItem('chat-id');

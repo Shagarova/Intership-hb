@@ -155,6 +155,10 @@ input{
 	.chat_messages div {
 		display: inline-block;
 	}
+	
+	.chat_messages .open-chat {
+		width: 100%;
+	}
 
 	.chat_friends-list .friends__list__item:hover {
 		background-color: #aec9d6;
